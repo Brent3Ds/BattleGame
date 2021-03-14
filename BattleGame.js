@@ -7,7 +7,7 @@ let warrior = {
 	attack: 120,
 	dodgeChance: 30,
 	critChance: 40,
-	critDam: 45,
+	critDam: 50,
 }
 let wizard = {
 	name: "Wizard",
