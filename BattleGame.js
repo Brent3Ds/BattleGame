@@ -3,7 +3,7 @@
 let warrior = {
 	name: "Warrior",
 	health: 5000,
-	defence: 75,
+	defence: 80,
 	attack: 120,
 	dodgeChance: 30,
 	critChance: 40,
@@ -18,7 +18,22 @@ let wizard = {
 	critChance: 20,
 	critDam: 25,
 }
+let rogue = {
+	name: "Rogue",
+	health: 2500,
+	defence: 40,
+	attack: 90,
+	dodgeChance: 45,
+	critChance: 70,
+	critDam: 110,
+}
+let hunter = {
+	name: "Hunter",
+	health: 3500,
+	defence: 50,
+	
  // ^^
+}
 
 // Random # genorator.
 const genRand = (min, max) => {
