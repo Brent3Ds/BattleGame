@@ -31,7 +31,10 @@ let hunter = {
 	name: "Hunter",
 	health: 3500,
 	defence: 50,
-	
+	attack: 130,
+	dodgeChance: 15,
+	critChance: 30,
+	critDam: 45,
  // ^^
 }
 
@@ -108,6 +111,6 @@ const battle = (Char1, Char2) => {
 // ^^
 
 //Console logs
-battle(warrior, wizard)
+battle(hunter, rogue)
 // ^^
 
