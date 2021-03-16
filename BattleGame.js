@@ -77,21 +77,30 @@ const defence = (spec) => {
 
 //Battle
 const battle = (Char1, Char2) => {
+	let Char1TotalDamage = (Char1.attack + critChance(Char1) - Char2.defence)
+	let Char2TotalDamage = (Char2.attack + critChance(Char2) - Char1.defence)
+
 	while (Char1.health > 0 && Char2.health > 0){
 			// Char 1 attacks Char 2
 			if (dodge(Char2) === "dodge") {
-				console.log(`${Char1.name} missed`)
+				console.log(`${Char1.name} attacked ${Char2.name} and missed`)
 			}else {
-				Char2.health = Char2.health - (Char1.attack + critChance(Char1) - Char2.defence) 
-				console.log(`${Char2.name} ${Char2.health}`)
+				Char2.health = Char2.health - Char1TotalDamage
+				console.log(`${Char1.name} attacked ${Char2.name} and hit for ${Char1TotalDamage}`)
 			}
 			// Char 2 attacks Char 1
 			if (dodge(Char1) === "dodge") {
-				console.log(`${Char2.name} missed`)
+				console.log(`${Char2.name} attacked ${Char1.name} and missed`)
 			}else {
-				Char1.health = Char1.health - (Char2.attack + critChance(Char2)- Char1.defence) 
-				console.log(`${Char1.name} ${Char1.health}`)
+				Char1.health = Char1.health - Char2TotalDamage
+				console.log(`${Char1.name} attacked ${Char2.name} and hit for ${Char1TotalDamage}`)
 			}
+
+			console.log(`-----`)
+			console.log(`Current Health`)
+			console.log(`${Char1.name}: ${Char1.health}`)
+			console.log(`${Char2.name}: ${Char2.health}`)
+			console.log(`-----`)
 		
 	} console.log(Char1.health > 0 ? `${Char1.name} Wins`: `${Char2.name} Wins`)
 	
