@@ -1,3 +1,31 @@
+// Magic spells request list.
+let spellList = [
+	{
+		name: "Fire Ball",
+		damage: 280,
+		dot: 15,
+		dotDuration: 4,	
+	},
+	{
+		name: "Holy Reaper",
+		damage: 90,
+		heal: 150,
+	},
+	{
+		name: "Searing toxin",
+		damage: 0,
+		dot: 80,
+		dotDuration: 4,      
+	}
+]
+
+const requestSpells = (listOfSpells,dataType) => {
+	for (let i = 0; i < listOfSpells.length; i++) {
+		console.log(listOfSpells[i][dataType]);
+	} 
+}
+
+// ^^
 
 //Characters list
 let warrior = {
@@ -13,7 +41,7 @@ let wizard = {
 	name: "Wizard",
 	health: 3000,
 	defence: 35,
-	attack: 280,
+	attack: [spellList[0],spellList[1],spellList[2]],
 	dodgeChance: 15,
 	critChance: 20,
 	critDam: 25,
@@ -110,7 +138,10 @@ const battle = (Char1, Char2) => {
 }
 // ^^
 
+
 //Console logs
-battle(hunter, rogue)
+//  battle(hunter, rogue)
+//requestSpells(spellList,"damage")
+console.log(wizard.attack)
 // ^^
 
