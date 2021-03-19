@@ -1,4 +1,4 @@
-// Magic spells request list.
+// Magic spells list.
 let spellList = [
 	{
 		name: "Fire Ball",
@@ -12,19 +12,47 @@ let spellList = [
 		heal: 150,
 	},
 	{
-		name: "Searing toxin",
+		name: "Searing Toxin",
 		damage: 0,
 		dot: 80,
 		dotDuration: 4,      
+	},
+	{
+		name: "Victory Bash",
+		damage: 140,
+		DefInc: 25,
+		DefTime: 4,
+	},
+	{
+		name: "Lighting Storm",
+		damage: 120,
+		dot: 120,
+		dotDuration: 1,
+	},
+	{
+		name: "Heavy Slam",
+		damage: 480,
+		cTime: 1,
+	},
+	{
+		name: "Side Slash",
+		damage: 250,
+		dot: 5,
+		dotDUration: 10,
 	}
 ]
+//^^
 
-const requestSpells = (listOfSpells,dataType) => {
-	for (let i = 0; i < listOfSpells.length; i++) {
-		console.log(listOfSpells[i][dataType]);
+// Spell Select
+const requestSpells = (SelectedSpells1,SelectedSpells2,SelectedSpells3) => {
+	let activeSpells = []
+	for (let i = 0; i < spellList.length; i++){
+		if (spellList[i].name === SelectedSpells1 || spellList[i].name === SelectedSpells2 || spellList[i].name === SelectedSpells3){
+			activeSpells.push(spellList[i])
+		}
 	} 
-}
-
+	return activeSpells
+} 
 // ^^
 
 //Characters list
@@ -32,7 +60,7 @@ let warrior = {
 	name: "Warrior",
 	health: 5000,
 	defence: 80,
-	attack: 120,
+	attack: requestSpells("Side Slash","Heavy Slam","Victory Bash"),
 	dodgeChance: 30,
 	critChance: 40,
 	critDam: 50,
@@ -142,6 +170,6 @@ const battle = (Char1, Char2) => {
 //Console logs
 //  battle(hunter, rogue)
 //requestSpells(spellList,"damage")
-console.log(wizard.attack)
+console.log(requestSpells("Side Slash","Heavy Slam","Victory Bash"))
 // ^^
 
