@@ -24,7 +24,7 @@ let spellList = [
 		DefTime: 4,
 	},
 	{
-		name: "Lighting Storm",
+		name: "Lightning Storm",
 		damage: 120,
 		dot: 120,
 		dotDuration: 1,
