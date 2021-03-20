@@ -1,6 +1,11 @@
 import './main.css'
 
+import {spells} from "./json/spells";
+import Spell from "./components/Spell";
+
 const App = () => {
+
+	console.log("spells: ", spells);
   return <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: '#F5EC5E', display: 'flex', flexDirection: 'column'}}>
 	{/* Info Header - Displays who's turn it is currently (Player 1's Turn / Player 2s Turn) */}
 	<div style={{width: '100%', background: '#F6F6F6', height: 80}}>
@@ -8,8 +13,10 @@ const App = () => {
 	</div>
 
 	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
-	<div style={{flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
-	what
+	<div style={{display: "flex",flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+	{spells.map((spell, index) => {
+		return <div><Spell name={spell.name} source={spell.source}/></div>
+	})}
 	</div>
 
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
