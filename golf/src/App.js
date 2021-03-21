@@ -52,32 +52,50 @@ const App = () => {
 	{phase === 'draft' 
 		? <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 		{spells.map((spell, index) => {
-			return <div onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+			return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
 		})}
 		</div>
 		
 		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
-			Battle
+			{/* Player 1 Selection */}
+			<div style={{width: '50%'}}>
+				{}
+			</div>
+
+			{/* Player 2 Selection */}
+			<div style={{width: '50%'}}>
+
+			</div>
 		</div>
 	}
 
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
 	<div style={{background: '#F3F3F3', width: '100%', flexGrow: 1, display: 'flex'}}>
 
-		{/* Player 1 - Left Side */}
-		<div style={{display: "flex", width: '50%', borderRight: '1px solid #333'}}>
-		<h2>Player 1</h2>
-		{player1.map((spell, index) => {
-				return <div onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
-			})}
+		{/* Player 1 - Right Side */}
+		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
+			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+				<h2>Player 1</h2>
+				<h2>Health: 9001</h2>
+			</div>
+			<div style={{display: 'flex'}}>
+				{player1.map((spell, index) => {
+						return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+					})}
+			</div>
 		</div>
 
 		{/* Player 2 - Right Side */}
-		<div style={{display: "flex", width: '50%', borderLeft: '1px solid #333'}}>
-		<h2>Player 2</h2>
-		{player2.map((spell, index) => {
-				return <div onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
-			})}
+		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
+			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+				<h2>Player 2</h2>
+				<h2>Health: 9001</h2>
+			</div>
+			<div style={{display: 'flex'}}>
+				{player2.map((spell, index) => {
+						return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+					})}
+			</div>
 		</div>
 	</div>
 
