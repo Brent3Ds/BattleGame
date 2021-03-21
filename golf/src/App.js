@@ -67,21 +67,17 @@ const App = () => {
 		{/* Player 1 - Left Side */}
 		<div style={{display: "flex", width: '50%', borderRight: '1px solid #333'}}>
 		<h2>Player 1</h2>
-		{
-			player1.map((spell, index) => {
-				return <div onClick={() => handleClick(spell)}><Spell name={spell.name} source={spell.source}/></div>
-			})
-		}
+		{player1.map((spell, index) => {
+				return <div onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+			})}
 		</div>
 
 		{/* Player 2 - Right Side */}
 		<div style={{display: "flex", width: '50%', borderLeft: '1px solid #333'}}>
 		<h2>Player 2</h2>
-		{
-			player2.map((spell, index) => {
-				return <div onClick={() => handleClick(spell)}><Spell name={spell.name} source={spell.source}/></div>
-			})
-		}
+		{player2.map((spell, index) => {
+				return <div onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+			})}
 		</div>
 	</div>
 
