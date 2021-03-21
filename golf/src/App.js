@@ -1,5 +1,5 @@
 import './main.css'
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
 import Spell from "./components/Spell";
 
@@ -10,20 +10,21 @@ const App = () => {
 	const [player2, setPlayer2] = useState([]);
 	const [phase, setPhase] = useState("draft");
 
-	const handleClick= (spell) => {
-
+	useEffect(() => {
 		//check if each player has 4 spells
 		if(player1.length === 4 && player2.length === 4){
 			//set the phase to battle!
 			setPhase("battle");
 		}
+	}, [player1.length, player2.length])
 
+	const handleClick= (spell) => {
 		//check which player is selecting the spell
 		if(turn === 1){
 			//add the selected spell to player 
 			//check if the spell is already in the players spells
 			if(!player1.includes(spell)){
-				setPlayer1([... player1, spell]);
+				setPlayer1([...player1, spell]);
 				//set turn to 2
 				setTurn(2);
 			}
@@ -32,12 +33,10 @@ const App = () => {
 			//add the selected spell to player 2
 			//check if the spell is already in the players spells
 			if(!player2.includes(spell)){
-				setPlayer2([... player2, spell]);
+				setPlayer2([...player2, spell]);
 				//set turn to 1
 				setTurn(1);
 			}
-			
-
 		}
 	}
 
@@ -50,11 +49,17 @@ const App = () => {
 	</div>
 
 	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
-	<div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
-	{spells.map((spell, index) => {
-		return <div onClick={() => handleClick(spell)}><Spell name={spell.name} source={spell.source}/></div>
-	})}
-	</div>
+	{phase === 'draft' 
+		? <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+		{spells.map((spell, index) => {
+			return <div onClick={() => handleClick(spell)}><Spell name={spell.name} source={spell.source}/></div>
+		})}
+		</div>
+		
+		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+			Battle
+		</div>
+	}
 
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
 	<div style={{background: '#F3F3F3', width: '100%', flexGrow: 1, display: 'flex'}}>
