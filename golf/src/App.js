@@ -93,7 +93,7 @@ const App = () => {
 	{phase === 'draft' 
 		? <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 		{spells.map((spell, index) => {
-			return <div key={index} onClick={() => selectSpell(spell)}><Spell spell={spell}/></div>
+			return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
 		})}
 		</div>
 		
@@ -120,7 +120,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player1.map((spell, index) => {
-						return <div key={index} onClick={() => castSpell(spell)}><Spell spell={spell}/></div>
+						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>
 					})}
 			</div>
 		</div>
@@ -133,7 +133,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
-						return <div key={index} onClick={() => castSpell(spell)}><Spell spell={spell}/></div>
+						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>
 					})}
 			</div>
 		</div>
