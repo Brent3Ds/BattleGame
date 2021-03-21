@@ -1,0 +1,83 @@
+{
+    "spells": [
+        {
+            "name": "Fireball",
+            "source": "/images/spells/fireball.svg",
+            "damage": 100,
+            "heal":0,
+            "damageOverTime": 10, 
+            "damageOverTimeDuration":4
+        },
+        {
+            "name": "Fire Storm",
+            "source": "/images/spells/fireball.svg",
+            "damage": 145,
+            "heal": 0,
+            "damageOverTime": 3, 
+            "damageOverTimeDuration": 6
+        },
+        {
+            "name": "Flame Pillar",
+            "source": "/images/spells/fireball.svg",
+            "damage": 150,
+            "heal": 0
+        },
+        {
+            "name": "Holy Reaper",
+            "source": "/images/spells/holyreaper.svg",
+            "damage": 90,
+            "heal": 150
+        },
+        {
+            "name": "Sacrifice",
+            "source": "/images/spells/holyreaper.svg",
+            "damage": 300,
+            "heal": -150
+        },
+        {
+            "name": "Searing Toxin",
+            "source":"/images/spells/searingtoxin.svg",
+            "damage": 0,
+            "heal":0,
+            "damageOverTime": 80,
+            "damageOverTimeDuration": 4
+        },
+        {
+            "name":"Victory Bash",
+            "source":"/images/spells/victorybash.svg",
+            "damage": 140,
+            "heal":0,
+            "defenceOverTime": 25, 
+            "defenceOverTimeDuration":4
+        },
+        {
+            "name": "Lightning Storm",
+            "source":"/images/spells/lightningstorm.svg",
+            "damage": 120,
+            "heal":0,
+            "damageOverTime": 120, 
+            "damageOverTimeDuration": 1
+        },
+        {
+            "name": "Heavy Slam",
+            "source":"/images/spells/heavyslam.svg",
+            "damage": 480,
+            "heal":0,
+            "stunDuration": 2
+        },
+        {
+            "name": "Side Slash",
+            "source":"/images/spells/sideslash.svg",
+            "damage": 250,
+            "heal":0,
+            "damageOverTime": 5,
+            "damageOverTimeDuration":10
+        },
+        {
+            "name":"Nothing",
+            "source":"/images/spells/nothing.svg",
+            "damage":0,
+            "heal":0
+        }
+    ]
+}
