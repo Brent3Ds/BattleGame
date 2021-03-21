@@ -11,12 +11,10 @@ const App = () => {
 	const [phase, setPhase] = useState("draft");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
-	const [player1Health, setPlayer1Health] = useState(3000);
-	const [player2Health, setPlayer2Health] = useState(3000);
+	const [player1Health, setPlayer1Health] = useState(1000);
+	const [player2Health, setPlayer2Health] = useState(1000);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
-	const [p1dmg, setp1dmg] = useState(0)
-	const [p2dmg, setp2dmg] = useState(0)
 
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
@@ -27,52 +25,40 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
-	const evaluateCombat = () => {
+	const evaluateCombat = (health, p1Attack, p2Attack, p1Debuffs) => {
 
-		/*
-		//calculate amount of damage player 1 takes from dots
-		if(player1Debuffs.length){
-			for (let i = 0; i < player1Debuffs.length; i++){
-				setp1dmg(p1dmg + player1Debuffs[i].damage)
-	
-				//decrement the duration of all debuffs
-				player1Debuffs[i].duration--
-				setPlayer1Debuffs(player1Debuffs.filter(e => e.duration !== 0))
+		let damage = p1Attack.damage;
+		let debuffs = p1Debuffs;
+
+		//check if player has debuff
+		if(p1Debuffs){
+			//loop through the debuffs
+			for(let i=0; i<p1Debuffs.length; i++){
+				//add the debuff damage to damage
+				damage = damage + p1Debuffs[i].damage;
+				//decrement the debuff or remove it from the debuff array
+				//if the duration is equal to 1
+				if(p1Debuffs[i].duration === 1){
+					//remove the debuff from the array
+					p1Debuffs.splice(i, 1);
+				//if the 
+				}else{
+					p1Debuffs[i].duration = p1Debuffs[i].duration - 1;
+				}
 			}
 		}
 
-		*/
+		//check if spell has damage over time
+		if(p1Attack.damageOverTime){
+			//add damage over time to player debuff
+			debuffs.push({damage: p1Attack.damageOverTime, duration: p1Attack.damageOverTimeDuration});
 
-		//take normal damage and heal
-		let temp = p1dmg + player2Attack.damage - player1Attack.heal
-		setp1dmg(temp)
-		console.log('p1dmg', p1dmg)
-
-		//check if player 1 will get any debuffs
-		if (player2Attack.damageOverTime){
-			setPlayer1Debuffs([...player1Debuffs, {damage: player2Attack.damageOverTime, duration: player2Attack.damageOverTimeDuration}])
 		}
 
-		//calculate amount of damage player 2 takes from dots
-		for (let i = 0; i < player2Debuffs.length; i++){
-			setp2dmg(p2dmg + player2Debuffs[i].damage)
+		return {damage, debuffs}
 
-			//decrement the duration of all debuffs
-			player2Debuffs[i].duration--
-			setPlayer2Debuffs(player2Debuffs.filter(e => e.duration !== 0))
-		}
+		
 
-		//take normal damage and heal
-		setp2dmg(p2dmg + player1Attack.damage - player2Attack.heal)
-
-		//check if player 2 will get any debuffs
-		if (player1Attack.damageOverTime){
-			setPlayer2Debuffs([...player2Debuffs, {damage: player1Attack.damageOverTime, duration: player1Attack.damageOverTimeDuration}])
-		}
-
-		console.log(p1dmg)
-		setPlayer1Health(player1Health - p1dmg);
-		setPlayer2Health(player2Health - p2dmg);
 	}
 
 	//Check if both players have submitted attacks
@@ -80,14 +66,31 @@ const App = () => {
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
-			evaluateCombat() 
+			let p1Update = evaluateCombat(player1Health, player1Attack, player2Attack, player1Debuffs);
+			let p2Update = evaluateCombat(player2Health, player2Attack, player1Attack, player2Debuffs);
+
+			console.log("p1 damage: ", p1Update.damage);
+			console.log("p1 debuffs: ", p1Update.debuffs);
+
+			console.log("p2 damage: ", p2Update.damage);
+			console.log("p2 debuffs: ", p2Update.debuffs);
+
+			//update the state of p1 health and debuffs
+			setPlayer1Health(player1Health - p1Update.damage);
+			setPlayer1Debuffs(p1Update.debuffs);
+
+			//update the state of p2 health and debuffs
+			setPlayer2Health(player2Health - p2Update.damage);
+			setPlayer2Debuffs(p2Update.debuffs);
+
+
 
 			//delay to show the spells cast
 			setTimeout(function(){
 			//set player attacks to null
 			setPlayer1Attack(null);
 			setPlayer2Attack(null);
-			}, 3500);
+			}, 1000);
 
 
 		}

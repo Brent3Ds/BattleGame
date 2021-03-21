@@ -3,9 +3,9 @@
         {
             "name": "Fireball",
             "source": "/images/spells/fireball.svg",
-            "damage": 280,
+            "damage": 100,
             "heal":0,
-            "damageOverTime": 15, 
+            "damageOverTime": 10, 
             "damageOverTimeDuration":4
         },
         {
