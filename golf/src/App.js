@@ -11,8 +11,10 @@ const App = () => {
 	const [phase, setPhase] = useState("draft");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
-	const [player1Health, setPlayer1Health] = useState(9001);
-	const [player2Health, setPlayer2Health] = useState(9001);
+	const [player1Health, setPlayer1Health] = useState(3000);
+	const [player2Health, setPlayer2Health] = useState(3000);
+	const [player1Debuffs, setPlayer1Debuffs] = useState([])
+	const [player2Debuffs, setPlayer2Debuffs] = useState([])
 
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
@@ -23,13 +25,55 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
+	const evaluateCombat = () => {
+		let p1dmg;
+		let p2dmg;
+
+		//calculate amount of damage player 1 takes from dots
+		for (let i = 0; i < player1Debuffs.length; i++){
+			p1dmg = p1dmg + player1Debuffs[i].damage
+
+			//decrement the duration of all debuffs
+			player1Debuffs[i].duration--
+			setPlayer1Debuffs(player1Debuffs.filter(e => e.duration !== 0))
+		}
+
+		//take normal damage and heal
+		p1dmg = p1dmg + player2Attack.damage - player1Attack.heal
+
+		//check if player 1 will get any debuffs
+		if (player2Attack.damageOverTime){
+			setPlayer1Debuffs([...player1Debuffs, player2Attack.damageOverTime])
+		}
+
+		//calculate amount of damage player 2 takes from dots
+		for (let i = 0; i < player2Debuffs.length; i++){
+			p2dmg = p2dmg + player2Debuffs[i].damage
+
+			//decrement the duration of all debuffs
+			player2Debuffs[i].duration--
+			setPlayer2Debuffs(player2Debuffs.filter(e => e.duration !== 0))
+		}
+
+		//take normal damage and heal
+		p2dmg = p2dmg + player1Attack.damage - player2Attack.heal
+
+		//check if player 2 will get any debuffs
+		if (player1Attack.damageOverTime){
+			setPlayer2Debuffs([...player2Debuffs, player1Attack.damageOverTime])
+		}
+
+
+		setPlayer1Health(p1dmg);
+		setPlayer2Health(p2dmg);
+	}
+
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
-			setPlayer1Health(player1Health - player2Attack.damage + player1Attack.heal);
-			setPlayer2Health(player2Health - player1Attack.damage + player2Attack.heal);
+			evaluateCombat() 
 
 			//delay to show the spells cast
 			setTimeout(function(){
@@ -104,8 +148,6 @@ const App = () => {
 			}}/>
 		}
 	}
-
-
 
   return <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: '#F5EC5E', display: 'flex', flexDirection: 'column'}}>
 	{/* Info Header - Displays who's turn it is currently (Player 1's Turn / Player 2s Turn) */}
