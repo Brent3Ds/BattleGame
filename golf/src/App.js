@@ -167,7 +167,7 @@ const App = () => {
 
 	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
 	{phase === 'draft' 
-		? <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+		? <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 		{spells.map((spell, index) => {
 			return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
 		})}
