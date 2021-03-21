@@ -6,7 +6,8 @@ const container_styles = {
 	margin: '10px 0 0 10px',
 	cursor: 'pointer',
 	userSelect: 'none',
-	background: '#FFF'
+	background: '#FFF',
+	color: '#333'
 }
 
 const Spell = ({ spell }) => {

@@ -20,8 +20,8 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
+	//happens during battle phase
 	const castSpell = (spell) => {
-
 		//only call if phase is battle
 		if(phase === "battle"){
 			//add the spell selected to the current players attack selection
@@ -41,7 +41,7 @@ const App = () => {
 
 	}
 
-
+	//happens during draft phase
 	const selectSpell= (spell) => {
 		//check which player is selecting the spell
 		if(turn === 1){
@@ -64,6 +64,23 @@ const App = () => {
 		}
 	}
 
+	const playerCard = (attack) => {
+		if (player1Attack && player2Attack) {
+			return <Spell spell={attack} /> 
+		} else if (attack) {
+			return <div style={{
+				border: '1px solid #7D7D7D', 
+				borderRadius: 4,
+				width: 200,
+				height: 170,
+				margin: '10px 0 0 10px',
+				cursor: 'pointer',
+				userSelect: 'none',
+				background: '#FFF'
+			}}/>
+		}
+	}
+
 
 
   return <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: '#F5EC5E', display: 'flex', flexDirection: 'column'}}>
@@ -80,15 +97,14 @@ const App = () => {
 		})}
 		</div>
 		
-		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
 			{/* Player 1 Selection */}
 			<div style={{width: '50%'}}>
-				{}
+				{playerCard(player1Attack)}
 			</div>
-
 			{/* Player 2 Selection */}
 			<div style={{width: '50%'}}>
-
+				{playerCard(player2Attack)}
 			</div>
 		</div>
 	}
