@@ -27,8 +27,9 @@ const App = () => {
 
 	const evaluateCombat = (health, p1Attack, p2Attack, p1Debuffs) => {
 
-		let damage = p1Attack.damage;
+		let damage = p2Attack.damage;
 		let debuffs = p1Debuffs;
+		let heal = p1Attack.heal;
 
 		//check if player has debuff
 		if(p1Debuffs){
@@ -55,7 +56,7 @@ const App = () => {
 
 		}
 
-		return {damage, debuffs}
+		return {damage, debuffs, heal}
 
 		
 
@@ -76,11 +77,11 @@ const App = () => {
 			console.log("p2 debuffs: ", p2Update.debuffs);
 
 			//update the state of p1 health and debuffs
-			setPlayer1Health(player1Health - p1Update.damage);
+			setPlayer1Health(player1Health - p1Update.damage + p1Update.heal);
 			setPlayer1Debuffs(p1Update.debuffs);
 
 			//update the state of p2 health and debuffs
-			setPlayer2Health(player2Health - p2Update.damage);
+			setPlayer2Health(player2Health - p2Update.damage + p2Update.heal);
 			setPlayer2Debuffs(p2Update.debuffs);
 
 

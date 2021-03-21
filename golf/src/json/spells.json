@@ -76,7 +76,8 @@
         {
             "name":"Nothing",
             "source":"/images/spells/nothing.svg",
-            "damage":0
+            "damage":0,
+            "heal":0
         }
     ]
 }
