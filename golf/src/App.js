@@ -15,7 +15,7 @@ const App = () => {
 	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
 	<div style={{display: "flex",flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 	{spells.map((spell, index) => {
-		return <div><Spell name={spell.name} source={spell.source}/></div>
+		return <div><Spell spell={spell} /></div>
 	})}
 	</div>
 
