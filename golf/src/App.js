@@ -11,7 +11,10 @@ const App = () => {
 	const [phase, setPhase] = useState("draft");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
+	const [player1Health, setPlayer1Health] = useState(9001);
+	const [player2Health, setPlayer2Health] = useState(9001);
 
+	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
 		//check if each player has 4 spells
 		if(player1.length === 4 && player2.length === 4){
@@ -20,10 +23,30 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
+	//Check if both players have submitted attacks
+	useEffect(() => {
+
+		if(player1Attack && player2Attack){
+			//subtract attacks from players health
+			setPlayer1Health(player1Health - player2Attack.damage + player1Attack.heal);
+			setPlayer2Health(player2Health - player1Attack.damage + player2Attack.heal);
+
+			//delay to show the spells cast
+			setTimeout(function(){
+			//set player attacks to null
+			setPlayer1Attack(null);
+			setPlayer2Attack(null);
+			}, 3500);
+
+
+		}
+	//eslint-disable-next-line
+	}, [player1Attack, player2Attack])
+
 	//happens during battle phase
 	const castSpell = (spell) => {
 		//only call if phase is battle
-		if(phase === "battle"){
+		if(phase === "battle" && (!player1Attack || !player2Attack)){
 			//add the spell selected to the current players attack selection
 			if(turn === 1){
 				//set player 1 spell
@@ -37,6 +60,7 @@ const App = () => {
 				//set the turn to player 1
 				setTurn(1);
 			}
+
 		}
 
 	}
@@ -116,7 +140,7 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<h2>Player 1</h2>
-				<h2>Health: 9001</h2>
+				<h2>Health: {player1Health}</h2>
 			</div>
 			<div style={{display: 'flex'}}>
 				{player1.map((spell, index) => {
@@ -129,7 +153,7 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<h2>Player 2</h2>
-				<h2>Health: 9001</h2>
+				<h2>Health: {player2Health}</h2>
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
