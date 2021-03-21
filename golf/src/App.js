@@ -9,6 +9,8 @@ const App = () => {
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
 	const [phase, setPhase] = useState("draft");
+	const [player1Attack, setPlayer1Attack] = useState();
+	const [player2Attack, setPlayer2Attack] = useState();
 
 	useEffect(() => {
 		//check if each player has 4 spells
@@ -18,7 +20,29 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
-	const handleClick= (spell) => {
+	const castSpell = (spell) => {
+
+		//only call if phase is battle
+		if(phase === "battle"){
+			//add the spell selected to the current players attack selection
+			if(turn === 1){
+				//set player 1 spell
+				setPlayer1Attack(spell);
+				//change the turn to player 2
+
+				setTurn(2);
+			}else{
+				//set player 2 spell
+				setPlayer2Attack(spell);
+				//set the turn to player 1
+				setTurn(1);
+			}
+		}
+
+	}
+
+
+	const selectSpell= (spell) => {
 		//check which player is selecting the spell
 		if(turn === 1){
 			//add the selected spell to player 
@@ -52,7 +76,7 @@ const App = () => {
 	{phase === 'draft' 
 		? <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 		{spells.map((spell, index) => {
-			return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+			return <div key={index} onClick={() => selectSpell(spell)}><Spell spell={spell}/></div>
 		})}
 		</div>
 		
@@ -80,7 +104,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player1.map((spell, index) => {
-						return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+						return <div key={index} onClick={() => castSpell(spell)}><Spell spell={spell}/></div>
 					})}
 			</div>
 		</div>
@@ -93,7 +117,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
-						return <div key={index} onClick={() => handleClick(spell)}><Spell spell={spell}/></div>
+						return <div key={index} onClick={() => castSpell(spell)}><Spell spell={spell}/></div>
 					})}
 			</div>
 		</div>
