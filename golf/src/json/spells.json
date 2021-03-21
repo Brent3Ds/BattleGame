@@ -5,8 +5,7 @@
             "source": "/images/spells/fireball.svg",
             "damage": 280,
             "heal":0,
-            "damageOverTime": 15,
-            "damageOverTimeDuration": 4
+            "damageOverTime":{"damage":15, "duration":4}
         },
         {
             "name": "Holy Reaper",
@@ -19,27 +18,21 @@
             "source":"/images/spells/searingtoxin.svg",
             "damage": 0,
             "heal":0,
-            "damageOverTime": 80,
-            "damageOverTimeDuration":4
-
+            "damageOverTime":{"damage":80,"duration":4}
         },
         {
             "name":"Victory Bash",
             "source":"/images/spells/victorybash.svg",
             "damage": 140,
             "heal":0,
-            "defence": 50,
-            "defenceOverTime":25,
-            "defenceOverTimeDuration":4
-
+            "defenceOverTime":{"defence":25, "duration":4}
         },
         {
             "name": "Lightning Storm",
             "source":"/images/spells/lightningstorm.svg",
             "damage": 120,
             "heal":0,
-            "damageOverTime": 120,
-            "damageOverTimeDuration": 1
+            "damageOverTime":{"damage":120, "duration":1}
         },
         {
             "name": "Heavy Slam",
@@ -53,8 +46,7 @@
             "source":"/images/spells/sideslash.svg",
             "damage": 250,
             "heal":0,
-            "damageOverTime": 5,
-            "damageOverTimeDuration": 10
+            "damageOverTime":{"damage":5,"duration":10}
         }
     ]
 }
