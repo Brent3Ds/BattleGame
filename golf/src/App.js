@@ -15,6 +15,8 @@ const App = () => {
 	const [player2Health, setPlayer2Health] = useState(3000);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
+	const [p1dmg, setp1dmg] = useState(0)
+	const [p2dmg, setp2dmg] = useState(0)
 
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
@@ -26,29 +28,34 @@ const App = () => {
 	}, [player1.length, player2.length])
 
 	const evaluateCombat = () => {
-		let p1dmg;
-		let p2dmg;
 
+		/*
 		//calculate amount of damage player 1 takes from dots
-		for (let i = 0; i < player1Debuffs.length; i++){
-			p1dmg = p1dmg + player1Debuffs[i].damage
-
-			//decrement the duration of all debuffs
-			player1Debuffs[i].duration--
-			setPlayer1Debuffs(player1Debuffs.filter(e => e.duration !== 0))
+		if(player1Debuffs.length){
+			for (let i = 0; i < player1Debuffs.length; i++){
+				setp1dmg(p1dmg + player1Debuffs[i].damage)
+	
+				//decrement the duration of all debuffs
+				player1Debuffs[i].duration--
+				setPlayer1Debuffs(player1Debuffs.filter(e => e.duration !== 0))
+			}
 		}
 
+		*/
+
 		//take normal damage and heal
-		p1dmg = p1dmg + player2Attack.damage - player1Attack.heal
+		let temp = p1dmg + player2Attack.damage - player1Attack.heal
+		setp1dmg(temp)
+		console.log('p1dmg', p1dmg)
 
 		//check if player 1 will get any debuffs
 		if (player2Attack.damageOverTime){
-			setPlayer1Debuffs([...player1Debuffs, player2Attack.damageOverTime])
+			setPlayer1Debuffs([...player1Debuffs, {damage: player2Attack.damageOverTime, duration: player2Attack.damageOverTimeDuration}])
 		}
 
 		//calculate amount of damage player 2 takes from dots
 		for (let i = 0; i < player2Debuffs.length; i++){
-			p2dmg = p2dmg + player2Debuffs[i].damage
+			setp2dmg(p2dmg + player2Debuffs[i].damage)
 
 			//decrement the duration of all debuffs
 			player2Debuffs[i].duration--
@@ -56,16 +63,16 @@ const App = () => {
 		}
 
 		//take normal damage and heal
-		p2dmg = p2dmg + player1Attack.damage - player2Attack.heal
+		setp2dmg(p2dmg + player1Attack.damage - player2Attack.heal)
 
 		//check if player 2 will get any debuffs
 		if (player1Attack.damageOverTime){
-			setPlayer2Debuffs([...player2Debuffs, player1Attack.damageOverTime])
+			setPlayer2Debuffs([...player2Debuffs, {damage: player1Attack.damageOverTime, duration: player1Attack.damageOverTimeDuration}])
 		}
 
-
-		setPlayer1Health(p1dmg);
-		setPlayer2Health(p2dmg);
+		console.log(p1dmg)
+		setPlayer1Health(player1Health - p1dmg);
+		setPlayer2Health(player2Health - p2dmg);
 	}
 
 	//Check if both players have submitted attacks
