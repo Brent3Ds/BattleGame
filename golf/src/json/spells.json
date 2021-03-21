@@ -72,6 +72,11 @@
             "heal":0,
             "damageOverTime": 5,
             "damageOverTimeDuration":10
+        },
+        {
+            "name":"Nothing",
+            "source":"/images/spells/nothing.svg",
+            "damage":0
         }
     ]
 }
