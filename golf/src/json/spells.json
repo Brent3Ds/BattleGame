@@ -10,7 +10,7 @@
         },
         {
             "name": "Fire Storm",
-            "source": "/images/spells/fireball.svg",
+            "source": "/images/spells/firestorm.svg",
             "damage": 145,
             "heal": 0,
             "damageOverTime": 3, 
@@ -18,7 +18,7 @@
         },
         {
             "name": "Flame Pillar",
-            "source": "/images/spells/fireball.svg",
+            "source": "/images/spells/flamepillar.svg",
             "damage": 150,
             "heal": 0
         },
@@ -30,7 +30,7 @@
         },
         {
             "name": "Sacrifice",
-            "source": "/images/spells/holyreaper.svg",
+            "source": "/images/spells/sacrifice.svg",
             "damage": 300,
             "heal": -150
         },

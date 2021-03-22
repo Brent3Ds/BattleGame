@@ -15,6 +15,7 @@ const App = () => {
 	const [player2Health, setPlayer2Health] = useState(1000);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
+	const [result, setResult] = useState();
 
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
@@ -25,40 +26,35 @@ const App = () => {
 		}
 	}, [player1.length, player2.length])
 
-	const evaluateCombat = (health, p1Attack, p2Attack, p1Debuffs) => {
+	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
+	const evaluateCombat = (playerAttack, opponentAttack, playerDebuffs, opponentDebuffs) => {
 
-		let damage = p2Attack.damage;
-		let debuffs = p1Debuffs;
-		let heal = p1Attack.heal;
+		let damage = opponentAttack.damage;
+		let debuffs = playerDebuffs;
 
-		//check if player has debuff
-		if(p1Debuffs){
-			//loop through the debuffs
-			for(let i=0; i<p1Debuffs.length; i++){
-				//add the debuff damage to damage
-				damage = damage + p1Debuffs[i].damage;
-				//decrement the debuff or remove it from the debuff array
-				//if the duration is equal to 1
-				if(p1Debuffs[i].duration === 1){
-					//remove the debuff from the array
-					p1Debuffs.splice(i, 1);
-				//if the 
+		//if the player has debuffs add the damage from them to damage and decrement/remove the duration
+		if(debuffs){
+			for(let i=0; i<debuffs.length; i++){
+				//add the debuff damage to the damage
+				damage += debuffs[i].damage;
+				//decrement the debuff duration / remove the debuff from the list
+				if(debuffs[i].duration === 1){
+					//remove the debuff
+					debuffs.splice(i,1);
 				}else{
-					p1Debuffs[i].duration = p1Debuffs[i].duration - 1;
+					//decrement the debuff
+					debuffs[i].duration -= 1;
 				}
 			}
 		}
 
-		//check if spell has damage over time
-		if(p1Attack.damageOverTime){
-			//add damage over time to player debuff
-			debuffs.push({damage: p1Attack.damageOverTime, duration: p1Attack.damageOverTimeDuration});
-
+		//if the opponents spell includes damage over time add the debuff to the player
+		if(opponentAttack.damageOverTime){
+			//add the debuff to the list of debuffs
+			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration})
 		}
 
-		return {damage, debuffs, heal}
-
-		
+		return {damage, debuffs}
 
 	}
 
@@ -67,33 +63,38 @@ const App = () => {
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
-			let p1Update = evaluateCombat(player1Health, player1Attack, player2Attack, player1Debuffs);
-			let p2Update = evaluateCombat(player2Health, player2Attack, player1Attack, player2Debuffs);
+			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
+			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs);
 
-			console.log("p1 damage: ", p1Update.damage);
-			console.log("p1 debuffs: ", p1Update.debuffs);
+			//check if either player or both players will die this turn
+			//Player Tie
+			if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+				setPhase("battleOver");
+				setResult(0);
+			//Player 2 Wins
+			}else if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0){
+				setPhase("battleOver");
+				setResult(2);
+			//Player 1 Wins
+			}else if(player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+				setPhase("battleOver");
+				setResult(1);
+			}else{
+				//update the state of p1 health and debuffs
+				setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+				setPlayer1Debuffs(p1Update.debuffs);
 
-			console.log("p2 damage: ", p2Update.damage);
-			console.log("p2 debuffs: ", p2Update.debuffs);
+				//update the state of p2 health and debuffs
+				setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+				setPlayer2Debuffs(p2Update.debuffs);
 
-			//update the state of p1 health and debuffs
-			setPlayer1Health(player1Health - p1Update.damage + p1Update.heal);
-			setPlayer1Debuffs(p1Update.debuffs);
-
-			//update the state of p2 health and debuffs
-			setPlayer2Health(player2Health - p2Update.damage + p2Update.heal);
-			setPlayer2Debuffs(p2Update.debuffs);
-
-
-
-			//delay to show the spells cast
-			setTimeout(function(){
-			//set player attacks to null
-			setPlayer1Attack(null);
-			setPlayer2Attack(null);
-			}, 1000);
-
-
+				//delay to show the spells cast
+				setTimeout(function(){
+				//set player attacks to null
+				setPlayer1Attack(null);
+				setPlayer2Attack(null);
+				}, 3000);
+			}
 		}
 	//eslint-disable-next-line
 	}, [player1Attack, player2Attack])
@@ -107,7 +108,6 @@ const App = () => {
 				//set player 1 spell
 				setPlayer1Attack(spell);
 				//change the turn to player 2
-
 				setTurn(2);
 			}else{
 				//set player 2 spell
@@ -173,6 +173,8 @@ const App = () => {
 			return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
 		})}
 		</div>
+
+		: (phase === "battleOver") ? <div>Player {result} won the battle!</div>
 		
 		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
 			{/* Player 1 Selection */}
