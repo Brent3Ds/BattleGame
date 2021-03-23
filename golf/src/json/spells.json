@@ -84,7 +84,7 @@
             "source":"/images/spells/shield.svg",
             "damage":0,
             "heal":0,
-            "defence":100
+            "shield":100
         }
     ]
 }

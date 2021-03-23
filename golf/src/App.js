@@ -45,11 +45,11 @@ const App = () => {
 
 		let damage = opponentAttack.damage;
 		let debuffs = playerDebuffs;
-		let defence = 0;
+		let shield = 0;
 
-		//if the playerAttack contains defence add the value to defence
-		if(playerAttack.defence){
-			defence += playerAttack.defence;
+		//if the playerAttack contains shield add the value to shield
+		if(playerAttack.shield){
+			shield += playerAttack.shield;
 		}
 
 		//if the player has debuffs add the damage from them to damage and decrement/remove the duration
@@ -74,7 +74,7 @@ const App = () => {
 			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
-		return {damage, defence, debuffs}
+		return {damage, shield, debuffs}
 
 	}
 
@@ -103,13 +103,11 @@ const App = () => {
 			}else{
 				//Continue the battle
 				console.log("Player 1 Defence BEFORE: ", player1Defence);
-				//Update the the defence of the players
-				setPlayer1Defence(player1Defence + p1Update.defence);
-				setPlayer2Defence(player2Defence + p2Update.defence);
+				//Update the the shield of the players
+				setPlayer1Defence(player1Defence + p1Update.shield);
+				setPlayer2Defence(player2Defence + p2Update.shield);
 
 				console.log("Player 1 Defence AFTER: ", player1Defence);
-
-				this.setState({ something: true }, () => console.log(this.state))
 
 /*
 					console.log("WAIT FOR DEFENCE");
@@ -123,16 +121,16 @@ const App = () => {
 							console.log(" Remainder less than - NEG");
 							//add the remainder to the players health
 							setPlayer1Health(player1Health + remainder + player1Attack.heal);
-							//set the defence to 0
+							//set the shield to 0
 							setPlayer1Defence(0);						
 						}else{
-							//subtract the damage from the defence
-							setPlayer1Defence(player1Defence + p1Update.defence - p1Update.damage);
+							//subtract the damage from the shield
+							setPlayer1Defence(player1Defence + p1Update.shield - p1Update.damage);
 						}
 
 					}else{
 						//setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-						//setPlayer1Defence(player1Defence + p1Update.defence);
+						//setPlayer1Defence(player1Defence + p1Update.shield);
 					}
 
 					//Player 2
@@ -144,12 +142,12 @@ const App = () => {
 							setPlayer2Defence(0);
 						}else{
 							console.log("Remainder Else: " );
-							setPlayer2Defence(player2Defence + p2Update.defence - player2Attack.heal);
+							setPlayer2Defence(player2Defence + p2Update.shield - player2Attack.heal);
 						}
 					}else{
 						console.log("Other Else: ");
 						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-						setPlayer2Defence(player2Defence + p2Update.defence);
+						setPlayer2Defence(player2Defence + p2Update.shield);
 					}
 
 					*/
