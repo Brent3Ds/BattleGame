@@ -1,7 +1,8 @@
 import './main.css'
 import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
-import Spell from "./components/Spell";
+import {heroes} from "./json/heroes";
+import Card from "./components/Card";
 
 const App = () => {
 
@@ -145,7 +146,7 @@ const App = () => {
 
 	const playerCard = (attack) => {
 		if (player1Attack && player2Attack) {
-			return <Spell spell={attack} /> 
+			return <Card spell={attack} /> 
 		} else if (attack) {
 			return <div style={{
 				border: '1px solid #7D7D7D', 
@@ -164,11 +165,15 @@ const App = () => {
 		switch(phase) {
 			case 'heroSelect':
 				//preparation for adding a hero/champion select stage
-				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>jews</div>
+				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
+					{heroes.map((hero, index) => {
+						return <Card key={index} spell={hero} action={() => selectSpell(hero)}/>
+					})}
+				</div>
 			case 'draft':
 				return <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 					{spells.map((spell, index) => {
-						return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
+						return <Card key={index} spell={spell} action={() => selectSpell(spell)}/>
 					})}
 				</div>
 			case 'battle':
@@ -195,7 +200,7 @@ const App = () => {
 		<h2 style={{textAlign: 'center', fontSize: 28, fontFamily: 'sans-serif', margin: 0, paddingTop: 20}}>Player {turn}'s Turn</h2>
 	</div>
 
-	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
+	{/* Game Board - Displays the main content for the current phase of the game (Card Selecting / Battle Information) */}
 	{showCurrentPhase()}
 
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
@@ -209,7 +214,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player1.map((spell, index) => {
-						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>
+						return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 					})}
 			</div>
 		</div>
@@ -222,7 +227,7 @@ const App = () => {
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
-						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>
+						return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 					})}
 			</div>
 		</div>
