@@ -1,4 +1,5 @@
 import './main.css'
+import React from "react"
 import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
 import {heroes} from "./json/heroes";
@@ -14,11 +15,14 @@ const App = () => {
 	const [player2Attack, setPlayer2Attack] = useState();
 	const [player1Health, setPlayer1Health] = useState(1000);
 	const [player2Health, setPlayer2Health] = useState(1000);
+	const [player1Defence, setPlayer1Defence] = useState(0);
+	const [player2Defence, setPlayer2Defence] = useState(0);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
 	const [player1Hero, setPlayer1Hero] = useState()
 	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
+	const [waitForDefence, setWaitForDefence] = useState();
 
 	//Check if ready to move from to next phase
 	useEffect(() => {
@@ -40,6 +44,12 @@ const App = () => {
 
 		let damage = opponentAttack.damage;
 		let debuffs = playerDebuffs;
+		let shield = 0;
+
+		//if the playerAttack contains shield add the value to shield
+		if(playerAttack.shield){
+			shield += playerAttack.shield;
+		}
 
 		//if the player has debuffs add the damage from them to damage and decrement/remove the duration
 		if(debuffs){
@@ -59,21 +69,25 @@ const App = () => {
 
 		//if the opponents spell includes damage over time add the debuff to the player
 		if(opponentAttack.damageOverTime){
-			//add the debuff to the list of debuffs
-			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration})
+
+			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
-		return {damage, debuffs}
+		return {damage, shield, debuffs}
 
 	}
 
 	//Check if both players have submitted attacks
+	//Check if both players have submitted attacks
 	useEffect(() => {
+
+		let p1Shield = 0;
+		let p2Shield = 0;
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
 			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
-			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs);
+			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs, player1Debuffs);
 
 			//check if either player or both players will die this turn
 			//Player Tie
@@ -89,14 +103,46 @@ const App = () => {
 				setPhase("battleOver");
 				setResult(1);
 			}else{
+				//Continue the battle
+
+				p1Shield = player1Defence + p1Update.shield;
+				p2Shield = player2Defence + p2Update.shield;
+
+					//Player 1
+					if(p1Shield > 0){
+						let difference = p1Shield - p1Update.damage;
+
+						if(difference < 0){
+							//add the difference to the players health
+							setPlayer1Health(player1Health + difference + player1Attack.heal);
+							//set the shield to 0
+							setPlayer1Defence(0);						
+						}else{
+							//subtract the damage from the shield
+							setPlayer1Defence(p1Shield - p1Update.damage);
+						}
+
+					}else{
+						setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+						setPlayer1Defence(player1Defence + p1Update.shield);
+					}
+
+					//Player 2
+					if(p2Shield > 0){
+						let difference = p2Shield - p2Update.damage;
+
+						if(difference < 0){
+							setPlayer2Health(player2Health + difference + player2Attack.heal);
+							setPlayer2Defence(0);
+						}else{
+							setPlayer2Defence(p2Shield - p2Update.damage);
+						}
+					}else{
+						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						setPlayer2Defence(player2Defence + p2Update.shield);
+					}
+				
 				//update the state of p1 health and debuffs
-				setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-				setPlayer1Debuffs(p1Update.debuffs);
-
-				//update the state of p2 health and debuffs
-				setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-				setPlayer2Debuffs(p2Update.debuffs);
-
 				//delay to show the spells cast
 				setTimeout(function(){
 				//set player attacks to null
