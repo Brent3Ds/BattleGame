@@ -182,7 +182,7 @@ const App = () => {
 					</div>
 				</div>
 			case 'battleOver':
-				return <div>Player {result} won the battle!</div>
+				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>Player {result} won the battle!</div>
 			default:
 				return "Error in Switch Statement"
 		}
