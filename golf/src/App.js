@@ -6,9 +6,6 @@ import Spell from "./components/Spell";
 
 const App = () => {
 
-	//const stateRef = React.useRef().current;
-	//const [state,setState] = useState(stateRef);
-
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
@@ -98,9 +95,6 @@ const App = () => {
 				setResult(1);
 			}else{
 				//Continue the battle
-				//Update the the shield of the players
-				//setPlayer1Defence(player1Defence + p1Update.shield);
-				//setPlayer2Defence(player2Defence + p2Update.shield);
 
 				p1Shield = player1Defence + p1Update.shield;
 				p2Shield = player2Defence + p2Update.shield;
@@ -139,11 +133,7 @@ const App = () => {
 						setPlayer2Defence(player2Defence + p2Update.shield);
 					}
 				
-				
 				//update the state of p1 health and debuffs
-				//setPlayer1Debuffs(p1Update.debuffs);
-				//setPlayer2Debuffs(p2Update.debuffs);
-
 				//delay to show the spells cast
 				setTimeout(function(){
 				//set player attacks to null
