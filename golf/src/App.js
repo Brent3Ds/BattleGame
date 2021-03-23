@@ -164,7 +164,7 @@ const App = () => {
 		switch(phase) {
 			case 'heroSelect':
 				//preparation for adding a hero/champion select stage
-				return <div></div>
+				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>jews</div>
 			case 'draft':
 				return <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
 					{spells.map((spell, index) => {
