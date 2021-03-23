@@ -24,13 +24,6 @@ const App = () => {
 	const [result, setResult] = useState();
 	const [waitForDefence, setWaitForDefence] = useState();
 
-	useEffect(() => { 
-		
-		console.log("Use Effect: ", player1Defence)
-
-	}, [player1Defence])
-
-
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
 		//check if each player has 4 spells
@@ -82,6 +75,9 @@ const App = () => {
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
+		let p1Defence = 0;
+		let p2Defence = 0;
+
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
 			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
@@ -102,30 +98,25 @@ const App = () => {
 				setResult(1);
 			}else{
 				//Continue the battle
-				console.log("Player 1 Defence BEFORE: ", player1Defence);
 				//Update the the shield of the players
-				setPlayer1Defence(player1Defence + p1Update.shield);
-				setPlayer2Defence(player2Defence + p2Update.shield);
+				//setPlayer1Defence(player1Defence + p1Update.shield);
+				//setPlayer2Defence(player2Defence + p2Update.shield);
 
-				console.log("Player 1 Defence AFTER: ", player1Defence);
+				p1Defence = player1Defence + p1Update.shield;
+				p2Defence = player2Defence + p2Update.shield;
 
-/*
-					console.log("WAIT FOR DEFENCE");
 					//Player 1
-					if(player1Defence > 0){
-						let remainder = player1Defence - p1Update.damage;
-
-						console.log("remainder: ", remainder);
+					if(p1Defence > 0){
+						let remainder = p1Defence - p1Update.damage;
 
 						if(remainder < 0){
-							console.log(" Remainder less than - NEG");
 							//add the remainder to the players health
 							setPlayer1Health(player1Health + remainder + player1Attack.heal);
 							//set the shield to 0
 							setPlayer1Defence(0);						
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Defence(player1Defence + p1Update.shield - p1Update.damage);
+							setPlayer1Defence(p1Defence - p1Update.damage);
 						}
 
 					}else{
@@ -134,26 +125,19 @@ const App = () => {
 					}
 
 					//Player 2
-					if(player2Defence > 0){
-						let remainder = player2Defence - p2Update.damage;
+					if(p2Defence > 0){
+						let remainder = p2Defence - p2Update.damage;
 
 						if(remainder < 0){
 							setPlayer2Health(player2Health + remainder + player2Attack.heal);
 							setPlayer2Defence(0);
 						}else{
-							console.log("Remainder Else: " );
-							setPlayer2Defence(player2Defence + p2Update.shield - player2Attack.heal);
+							setPlayer2Defence(p2Defence - p2Update.damage);
 						}
 					}else{
-						console.log("Other Else: ");
-						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-						setPlayer2Defence(player2Defence + p2Update.shield);
+						//setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						//setPlayer2Defence(player2Defence + p2Update.shield);
 					}
-
-					*/
-
-					//set waitForDefence to false
-
 				
 				
 				//update the state of p1 health and debuffs
