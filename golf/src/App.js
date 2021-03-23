@@ -49,7 +49,6 @@ const App = () => {
 
 		//if the playerAttack contains shield add the value to shield
 		if(playerAttack.shield){
-			console.log('adding shield value')
 			shield += playerAttack.shield;
 		}
 
@@ -78,98 +77,97 @@ const App = () => {
 		return {damage, shield, debuffs}
 
 	}
+
+	//Check if both players have submitted attacks
 	//Check if both players have submitted attacks
 	useEffect(() => {
-		
+
 		if(player1Attack && player2Attack){
+			//subtract attacks from players health
 			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
 			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs, player1Debuffs);
 
 			//check if either player or both players will die this turn
-			const checkVictory = () => {
-				switch(true){
-					case player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0:
-						setPhase("battleOver");
-						setResult(0);
-						break;
-					case player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0:
-						setPhase("battleOver");
-						setResult(2);
-						break;
-					case player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0:
-						setPhase("battleOver");
-						setResult(2);
-						break;
-					default:
-						break;
-				}
+			//Player Tie
+			if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+				setPhase("battleOver");
+				setResult(0);
+			//Player 2 Wins
+			}else if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0){
+				setPhase("battleOver");
+				setResult(2);
+			//Player 1 Wins
+			}else if(player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+				setPhase("battleOver");
+				setResult(1);
+			}else{
+				//Continue the battle
+				console.log("Player 1 Defence BEFORE: ", player1Defence);
+				//Update the the shield of the players
+				setPlayer1Defence(player1Defence + p1Update.shield);
+				setPlayer2Defence(player2Defence + p2Update.shield);
+
+				console.log("Player 1 Defence AFTER: ", player1Defence);
+
+/*
+					console.log("WAIT FOR DEFENCE");
+					//Player 1
+					if(player1Defence > 0){
+						let remainder = player1Defence - p1Update.damage;
+
+						console.log("remainder: ", remainder);
+
+						if(remainder < 0){
+							console.log(" Remainder less than - NEG");
+							//add the remainder to the players health
+							setPlayer1Health(player1Health + remainder + player1Attack.heal);
+							//set the shield to 0
+							setPlayer1Defence(0);						
+						}else{
+							//subtract the damage from the shield
+							setPlayer1Defence(player1Defence + p1Update.shield - p1Update.damage);
+						}
+
+					}else{
+						//setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+						//setPlayer1Defence(player1Defence + p1Update.shield);
+					}
+
+					//Player 2
+					if(player2Defence > 0){
+						let remainder = player2Defence - p2Update.damage;
+
+						if(remainder < 0){
+							setPlayer2Health(player2Health + remainder + player2Attack.heal);
+							setPlayer2Defence(0);
+						}else{
+							console.log("Remainder Else: " );
+							setPlayer2Defence(player2Defence + p2Update.shield - player2Attack.heal);
+						}
+					}else{
+						console.log("Other Else: ");
+						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						setPlayer2Defence(player2Defence + p2Update.shield);
+					}
+
+					*/
+
+					//set waitForDefence to false
+
+				
+				
+				//update the state of p1 health and debuffs
+				//setPlayer1Debuffs(p1Update.debuffs);
+				//setPlayer2Debuffs(p2Update.debuffs);
+
+				//delay to show the spells cast
+				setTimeout(function(){
+				//set player attacks to null
+				setPlayer1Attack(null);
+				setPlayer2Attack(null);
+				}, 3000);
 			}
-
-			checkVictory()
-
-			//Continue the battle
-			console.log("Player 1 Defence BEFORE: ", player1Defence, p1Update.shield);
-			//Update the the shield of the players
-			setPlayer1Defence(player1Defence + p1Update.shield);
-			setPlayer2Defence(player2Defence + p2Update.shield);
-
-			console.log("Player 1 Defence AFTER: ", player1Defence, p1Update.shield);
-
-			// console.log("WAIT FOR DEFENCE");
-			// //Player 1
-			// if(player1Defence > 0){
-			// 	let difference = player1Defence - p1Update.damage;
-
-			// 	console.log("difference: ", difference);
-
-			// 	if(difference < 0){
-			// 		console.log(" Remainder less than - NEG");
-			// 		//add the difference to the players health
-			// 		setPlayer1Health(player1Health + difference + player1Attack.heal);
-			// 		//set the shield to 0
-			// 		setPlayer1Defence(0);						
-			// 	}else{
-			// 		//subtract the damage from the shield
-			// 		setPlayer1Defence(player1Defence + p1Update.shield - p1Update.damage);
-			// 	}
-
-			// }else{
-			// 	//setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-			// 	//setPlayer1Defence(player1Defence + p1Update.shield);
-			// }
-
-			// //Player 2
-			// if(player2Defence > 0){
-			// 	let difference = player2Defence - p2Update.damage;
-
-			// 	if(difference < 0){
-			// 		setPlayer2Health(player2Health + difference + player2Attack.heal);
-			// 		setPlayer2Defence(0);
-			// 	}else{
-			// 		console.log("Remainder Else: " );
-			// 		setPlayer2Defence(player2Defence + p2Update.shield - player2Attack.heal);
-			// 	}
-			// }else{
-			// 	console.log("Other Else: ");
-			// 	setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-			// 	setPlayer2Defence(player2Defence + p2Update.shield);
-			// }
-
-
-			//set waitForDefence to false
-
-		
-		
-			//update the state of p1 health and debuffs
-			//setPlayer1Debuffs(p1Update.debuffs);
-			//setPlayer2Debuffs(p2Update.debuffs);
 		}
-		//delay to show the spells cast
-		setTimeout(function(){
-			//set player attacks to null
-			setPlayer1Attack(null);
-			setPlayer2Attack(null);
-		}, 3000);
 	//eslint-disable-next-line
 	}, [player1Attack, player2Attack])
 
