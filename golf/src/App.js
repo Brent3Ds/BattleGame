@@ -160,6 +160,34 @@ const App = () => {
 		}
 	}
 
+	const showCurrentPhase = () => {
+		switch(phase) {
+			case 'heroSelect':
+				return <div></div>
+			case 'draft':
+				return <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
+					{spells.map((spell, index) => {
+						return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
+					})}
+				</div>
+			case 'battle':
+				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
+					{/* Player 1 Selection */}
+					<div style={{width: '50%'}}>
+						{playerCard(player1Attack)}
+					</div>
+					{/* Player 2 Selection */}
+					<div style={{width: '50%'}}>
+						{playerCard(player2Attack)}
+					</div>
+				</div>
+			case 'battleOver':
+				return <div>Player {result} won the battle!</div>
+			default:
+				return "Error in Switch Statement"
+		}
+	}
+
   return <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: '#F5EC5E', display: 'flex', flexDirection: 'column'}}>
 	{/* Info Header - Displays who's turn it is currently (Player 1's Turn / Player 2s Turn) */}
 	<div style={{width: '100%', background: '#F6F6F6', height: 80}}>
@@ -167,26 +195,7 @@ const App = () => {
 	</div>
 
 	{/* Game Board - Displays the main content for the current phase of the game (Spell Selecting / Battle Information) */}
-	{phase === 'draft' 
-		? <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
-		{spells.map((spell, index) => {
-			return <Spell key={index} spell={spell} action={() => selectSpell(spell)}/>
-		})}
-		</div>
-
-		: (phase === "battleOver") ? <div>Player {result} won the battle!</div>
-		
-		: <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
-			{/* Player 1 Selection */}
-			<div style={{width: '50%'}}>
-				{playerCard(player1Attack)}
-			</div>
-			{/* Player 2 Selection */}
-			<div style={{width: '50%'}}>
-				{playerCard(player2Attack)}
-			</div>
-		</div>
-	}
+	{showCurrentPhase()}
 
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
 	<div style={{background: '#F3F3F3', width: '100%', flexGrow: 1, display: 'flex'}}>
