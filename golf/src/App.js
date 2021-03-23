@@ -163,6 +163,7 @@ const App = () => {
 	const showCurrentPhase = () => {
 		switch(phase) {
 			case 'heroSelect':
+				//preparation for adding a hero/champion select stage
 				return <div></div>
 			case 'draft':
 				return <div style={{display: "flex", flexGrow: 3, flexWrap: 'wrap', width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#000'}}>
