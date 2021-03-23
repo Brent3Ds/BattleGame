@@ -16,16 +16,24 @@ const App = () => {
 	const [player2Health, setPlayer2Health] = useState(1000);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
+	const [player1Hero, setPlayer1Hero] = useState()
+	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
 
-	//Check if ready to move from Draft to Battle phase
+	//Check if ready to move from to next phase
 	useEffect(() => {
+		//check if each player has selected a hero
+		if(player1Hero && player2Hero){
+			setPhase("draft")
+		}
+
 		//check if each player has 4 spells
 		if(player1.length === 4 && player2.length === 4){
 			//set the phase to battle!
 			setPhase("battle");
 		}
-	}, [player1.length, player2.length])
+
+	}, [player1.length, player2.length, player1Hero, player2Hero])
 
 	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
 	const evaluateCombat = (playerAttack, opponentAttack, playerDebuffs, opponentDebuffs) => {
@@ -121,8 +129,18 @@ const App = () => {
 
 	}
 
+	const selectHero = (hero) => {
+		if(turn === 1) {
+			setPlayer1Hero(hero)
+			setTurn(2)
+		} else {
+			setPlayer2Hero(hero)
+			setTurn(1)
+		}
+	}
+
 	//happens during draft phase
-	const selectSpell= (spell) => {
+	const selectSpell = (spell) => {
 		//check which player is selecting the spell
 		if(turn === 1){
 			//add the selected spell to player 
@@ -167,7 +185,7 @@ const App = () => {
 				//preparation for adding a hero/champion select stage
 				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
 					{heroes.map((hero, index) => {
-						return <Card key={index} spell={hero} action={() => selectSpell(hero)}/>
+						return <Card key={index} spell={hero} action={() => selectHero(hero)}/>
 					})}
 				</div>
 			case 'draft':
@@ -209,13 +227,24 @@ const App = () => {
 		{/* Player 1 - Right Side */}
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-				<h2>Player 1</h2>
-				<h2>Health: {player1Health}</h2>
-			</div>
-			<div style={{display: 'flex'}}>
-				{player1.map((spell, index) => {
-						return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
-					})}
+				<div>
+					<div style={{display: 'flex'}}>
+						<h2>Player 1</h2>
+						{player1Hero && <img alt="" src={player1Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
+					</div>
+					
+					{player1Hero && 
+						<div>
+							<h2>Health: {player1Hero.health}</h2>
+							<h2>Defence: {player1Hero.defence}</h2>
+						</div>	
+					}
+				</div>
+				<div style={{display: 'flex'}}>
+					{player1.map((spell, index) => {
+							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
+						})}
+				</div>
 			</div>
 		</div>
 
@@ -223,7 +252,14 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<h2>Player 2</h2>
-				<h2>Health: {player2Health}</h2>
+				{player2Hero && 
+					<div>
+						<img alt="" src={player2Hero.source} style={{height: 30, width: 30}}/>
+						<h2>Health: {player2Hero.health}</h2>
+						<h2>Defence: {player2Hero.defence}</h2>
+					</div>
+				}
+			
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
