@@ -1,0 +1,18 @@
+{
+    "heroes": [
+        {
+            "name": "Warrior",
+            "source": "/images/spells/fireball.svg",
+            "health": 5000,
+            "defence": 80,
+            "dodgeChance": 30
+        },
+        {
+            "name": "Wizard",
+            "source": "/images/spells/fireball.svg",
+            "health": 3000,
+            "defence": 35,
+            "dodgeChance": 15
+        }
+    ]
+}
