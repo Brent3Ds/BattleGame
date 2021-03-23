@@ -8,7 +8,7 @@ const App = () => {
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
-	const [phase, setPhase] = useState("draft");
+	const [phase, setPhase] = useState("heroSelect");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
 	const [player1Health, setPlayer1Health] = useState(1000);
