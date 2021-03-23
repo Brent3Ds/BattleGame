@@ -75,8 +75,8 @@ const App = () => {
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
-		let p1Defence = 0;
-		let p2Defence = 0;
+		let p1Shield = 0;
+		let p2Shield = 0;
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
@@ -102,41 +102,41 @@ const App = () => {
 				//setPlayer1Defence(player1Defence + p1Update.shield);
 				//setPlayer2Defence(player2Defence + p2Update.shield);
 
-				p1Defence = player1Defence + p1Update.shield;
-				p2Defence = player2Defence + p2Update.shield;
+				p1Shield = player1Defence + p1Update.shield;
+				p2Shield = player2Defence + p2Update.shield;
 
 					//Player 1
-					if(p1Defence > 0){
-						let remainder = p1Defence - p1Update.damage;
+					if(p1Shield > 0){
+						let difference = p1Shield - p1Update.damage;
 
-						if(remainder < 0){
-							//add the remainder to the players health
-							setPlayer1Health(player1Health + remainder + player1Attack.heal);
+						if(difference < 0){
+							//add the difference to the players health
+							setPlayer1Health(player1Health + difference + player1Attack.heal);
 							//set the shield to 0
 							setPlayer1Defence(0);						
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Defence(p1Defence - p1Update.damage);
+							setPlayer1Defence(p1Shield - p1Update.damage);
 						}
 
 					}else{
-						//setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-						//setPlayer1Defence(player1Defence + p1Update.shield);
+						setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+						setPlayer1Defence(player1Defence + p1Update.shield);
 					}
 
 					//Player 2
-					if(p2Defence > 0){
-						let remainder = p2Defence - p2Update.damage;
+					if(p2Shield > 0){
+						let difference = p2Shield - p2Update.damage;
 
-						if(remainder < 0){
-							setPlayer2Health(player2Health + remainder + player2Attack.heal);
+						if(difference < 0){
+							setPlayer2Health(player2Health + difference + player2Attack.heal);
 							setPlayer2Defence(0);
 						}else{
-							setPlayer2Defence(p2Defence - p2Update.damage);
+							setPlayer2Defence(p2Shield - p2Update.damage);
 						}
 					}else{
-						//setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-						//setPlayer2Defence(player2Defence + p2Update.shield);
+						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						setPlayer2Defence(player2Defence + p2Update.shield);
 					}
 				
 				
