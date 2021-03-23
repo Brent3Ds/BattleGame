@@ -49,6 +49,7 @@ const App = () => {
 
 		//if the playerAttack contains shield add the value to shield
 		if(playerAttack.shield){
+			console.log('adding shield value')
 			shield += playerAttack.shield;
 		}
 
@@ -77,37 +78,37 @@ const App = () => {
 		return {damage, shield, debuffs}
 
 	}
-
-	//Check if both players have submitted attacks
 	//Check if both players have submitted attacks
 	useEffect(() => {
-
+		
 		if(player1Attack && player2Attack){
-			//subtract attacks from players health
 			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
 			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs, player1Debuffs);
 
 			//check if either player or both players will die this turn
-			//Player Tie
-			if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
-				setPhase("battleOver");
-				setResult(0);
-			//Player 2 Wins
-			}else if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0){
-				setPhase("battleOver");
-				setResult(2);
-			//Player 1 Wins
-			}else if(player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
-				setPhase("battleOver");
-				setResult(1);
-			}else{
-				//Continue the battle
-				console.log("Player 1 Defence BEFORE: ", player1Defence);
-				//Update the the shield of the players
-				setPlayer1Defence(player1Defence + p1Update.shield);
-				setPlayer2Defence(player2Defence + p2Update.shield);
+			const checkVictory = () => {
+				switch(true){
+					case player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0:
+						setPhase("battleOver");
+						setResult(0);
+					case player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0:
+						setPhase("battleOver");
+						setResult(2);
+					case player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0:
+						setPhase("battleOver");
+						setResult(2);
+				}
+			}
 
-				console.log("Player 1 Defence AFTER: ", player1Defence);
+			checkVictory()
+
+			//Continue the battle
+			console.log("Player 1 Defence BEFORE: ", player1Defence, p1Update.shield);
+			//Update the the shield of the players
+			setPlayer1Defence(player1Defence + p1Update.shield);
+			setPlayer2Defence(player2Defence + p2Update.shield);
+
+			console.log("Player 1 Defence AFTER: ", player1Defence, p1Update.shield);
 
 /*
 					console.log("WAIT FOR DEFENCE");
@@ -159,15 +160,13 @@ const App = () => {
 				//update the state of p1 health and debuffs
 				//setPlayer1Debuffs(p1Update.debuffs);
 				//setPlayer2Debuffs(p2Update.debuffs);
-
-				//delay to show the spells cast
-				setTimeout(function(){
-				//set player attacks to null
-				setPlayer1Attack(null);
-				setPlayer2Attack(null);
-				}, 3000);
-			}
 		}
+		//delay to show the spells cast
+		setTimeout(function(){
+			//set player attacks to null
+			setPlayer1Attack(null);
+			setPlayer2Attack(null);
+		}, 3000);
 	//eslint-disable-next-line
 	}, [player1Attack, player2Attack])
 
