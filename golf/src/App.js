@@ -1,9 +1,13 @@
 import './main.css'
+import React from "react"
 import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
 import Spell from "./components/Spell";
 
 const App = () => {
+
+	//const stateRef = React.useRef().current;
+	//const [state,setState] = useState(stateRef);
 
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
@@ -13,9 +17,19 @@ const App = () => {
 	const [player2Attack, setPlayer2Attack] = useState();
 	const [player1Health, setPlayer1Health] = useState(1000);
 	const [player2Health, setPlayer2Health] = useState(1000);
+	const [player1Defence, setPlayer1Defence] = useState(0);
+	const [player2Defence, setPlayer2Defence] = useState(0);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
 	const [result, setResult] = useState();
+	const [waitForDefence, setWaitForDefence] = useState();
+
+	useEffect(() => { 
+		
+		console.log("Use Effect: ", player1Defence)
+
+	}, [player1Defence])
+
 
 	//Check if ready to move from Draft to Battle phase
 	useEffect(() => {
@@ -31,6 +45,12 @@ const App = () => {
 
 		let damage = opponentAttack.damage;
 		let debuffs = playerDebuffs;
+		let defence = 0;
+
+		//if the playerAttack contains defence add the value to defence
+		if(playerAttack.defence){
+			defence += playerAttack.defence;
+		}
 
 		//if the player has debuffs add the damage from them to damage and decrement/remove the duration
 		if(debuffs){
@@ -50,21 +70,22 @@ const App = () => {
 
 		//if the opponents spell includes damage over time add the debuff to the player
 		if(opponentAttack.damageOverTime){
-			//add the debuff to the list of debuffs
-			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration})
+
+			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
-		return {damage, debuffs}
+		return {damage, defence, debuffs}
 
 	}
 
+	//Check if both players have submitted attacks
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
 		if(player1Attack && player2Attack){
 			//subtract attacks from players health
 			let p1Update = evaluateCombat(player1Attack, player2Attack, player1Debuffs, player2Debuffs);
-			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs);
+			let p2Update = evaluateCombat(player2Attack, player1Attack, player2Debuffs, player1Debuffs);
 
 			//check if either player or both players will die this turn
 			//Player Tie
@@ -80,13 +101,66 @@ const App = () => {
 				setPhase("battleOver");
 				setResult(1);
 			}else{
-				//update the state of p1 health and debuffs
-				setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-				setPlayer1Debuffs(p1Update.debuffs);
+				//Continue the battle
+				console.log("Player 1 Defence BEFORE: ", player1Defence);
+				//Update the the defence of the players
+				setPlayer1Defence(player1Defence + p1Update.defence);
+				setPlayer2Defence(player2Defence + p2Update.defence);
 
-				//update the state of p2 health and debuffs
-				setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-				setPlayer2Debuffs(p2Update.debuffs);
+				console.log("Player 1 Defence AFTER: ", player1Defence);
+
+				this.setState({ something: true }, () => console.log(this.state))
+
+/*
+					console.log("WAIT FOR DEFENCE");
+					//Player 1
+					if(player1Defence > 0){
+						let remainder = player1Defence - p1Update.damage;
+
+						console.log("remainder: ", remainder);
+
+						if(remainder < 0){
+							console.log(" Remainder less than - NEG");
+							//add the remainder to the players health
+							setPlayer1Health(player1Health + remainder + player1Attack.heal);
+							//set the defence to 0
+							setPlayer1Defence(0);						
+						}else{
+							//subtract the damage from the defence
+							setPlayer1Defence(player1Defence + p1Update.defence - p1Update.damage);
+						}
+
+					}else{
+						//setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+						//setPlayer1Defence(player1Defence + p1Update.defence);
+					}
+
+					//Player 2
+					if(player2Defence > 0){
+						let remainder = player2Defence - p2Update.damage;
+
+						if(remainder < 0){
+							setPlayer2Health(player2Health + remainder + player2Attack.heal);
+							setPlayer2Defence(0);
+						}else{
+							console.log("Remainder Else: " );
+							setPlayer2Defence(player2Defence + p2Update.defence - player2Attack.heal);
+						}
+					}else{
+						console.log("Other Else: ");
+						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						setPlayer2Defence(player2Defence + p2Update.defence);
+					}
+
+					*/
+
+					//set waitForDefence to false
+
+				
+				
+				//update the state of p1 health and debuffs
+				//setPlayer1Debuffs(p1Update.debuffs);
+				//setPlayer2Debuffs(p2Update.debuffs);
 
 				//delay to show the spells cast
 				setTimeout(function(){
@@ -206,6 +280,7 @@ const App = () => {
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<h2>Player 1</h2>
 				<h2>Health: {player1Health}</h2>
+				<h2>Defence: {player1Defence}</h2>
 			</div>
 			<div style={{display: 'flex'}}>
 				{player1.map((spell, index) => {
@@ -219,6 +294,7 @@ const App = () => {
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<h2>Player 2</h2>
 				<h2>Health: {player2Health}</h2>
+				<h2>Defence: {player2Defence}</h2>
 			</div>
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {

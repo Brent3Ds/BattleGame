@@ -78,6 +78,13 @@
             "source":"/images/spells/nothing.svg",
             "damage":0,
             "heal":0
+        },
+        {
+            "name":"Shield",
+            "source":"/images/spells/shield.svg",
+            "damage":0,
+            "heal":0,
+            "defence":100
         }
     ]
 }
