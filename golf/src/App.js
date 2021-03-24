@@ -3,6 +3,7 @@ import React from "react"
 import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
 import Spell from "./components/Spell";
+import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
 
@@ -256,7 +257,11 @@ const App = () => {
 				<h2>Health: {player1Health}</h2>
 				<h2>Shield: {player1Shield}</h2>
 			</div>
+
+			<ProgressBar width={(((player1Health - 0) * (100 - 0)) / (1000 - 0)) + 0}/>
+
 			<div style={{display: 'flex'}}>
+				
 				{player1.map((spell, index) => {
 						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>
 					})}
@@ -270,6 +275,9 @@ const App = () => {
 				<h2>Health: {player2Health}</h2>
 				<h2>Shield: {player2Shield}</h2>
 			</div>
+
+			<ProgressBar width={(((player1Health - 0) * (100 - 0)) / (1000 - 0)) + 0}/>
+
 			<div style={{display: 'flex'}}>
 				{player2.map((spell, index) => {
 						return <Spell key={index} spell={spell} action={() => castSpell(spell)}/>

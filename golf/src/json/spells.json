@@ -87,6 +87,13 @@
             "shield":100
         },
         {
+            "name":"Vishnu Beam",
+            "source":"/images/spells/vishnubeam.svg",
+            "damage": 200,
+            "heal": 100,
+            "shield": 100
+        },
+        {
             "name":"Slice",
             "source":"/images/spells/slice.svg",
             "damage": 50,
