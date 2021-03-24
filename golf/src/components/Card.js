@@ -10,7 +10,7 @@ const container_styles = {
 	color: '#333'
 }
 
-const Spell = ({ spell, action }) => {
+const Card = ({ spell, action }) => {
 	return <div style={container_styles} onClick={action}>
 		<div style={{margin: 10, display: 'flex'}}>
 			<h4 style={{margin: 0, padding: '20 0 0 20', flexGrow: 2}}>{spell.name}</h4>
@@ -34,4 +34,4 @@ const Spell = ({ spell, action }) => {
 	</div>
 };
 
-export default Spell;
+export default Card;
