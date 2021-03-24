@@ -87,13 +87,6 @@
             "shield":100
         },
         {
-            "name":"Jesus Beam",
-            "source":"/images/spells/jesusbeam.svg",
-            "damage": 200,
-            "heal": 100,
-            "shield": 100
-        },
-        {
             "name":"Slice",
             "source":"/images/spells/slice.svg",
             "damage": 50,
@@ -101,7 +94,7 @@
             "shield": 0,
             "damageOverTime": 10,
             "damageOverTimeDuration": 10
-        }
+        },
         {
             "name":"Jesus Beam",
             "source":"/images/spells/jesusbeam.svg",
