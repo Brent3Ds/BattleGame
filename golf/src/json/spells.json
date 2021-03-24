@@ -87,8 +87,8 @@
             "shield":100
         },
         {
-            "name":"Jesus Beam",
-            "source":"/images/spells/jesusbeam.svg",
+            "name":"Vishnu Beam",
+            "source":"/images/spells/vishnubeam.svg",
             "damage": 200,
             "heal": 100,
             "shield": 100
