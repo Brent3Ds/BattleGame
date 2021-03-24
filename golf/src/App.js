@@ -245,10 +245,26 @@ const App = () => {
 					</div>
 				</div>
 			case 'battleOver':
-				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
-					<h1 style={{fontSize:200, textAlign: "center"}}>
+				return <div style={{display: "flex", flexGrow: 3,flexDirection: "column", width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
+					<h1 style={{fontSize:200, textAlign: "center", width: "100%", color: "#c49c04"}}>
 						Player {result} won the battle!
 					</h1>
+					<div style={{margin: "0 auto"}}>
+						<button style={{textAlign: "center",fontSize: 45, marginBottom: 5, width: 250, height: 75, background: "#979799"}}
+						onClick = {() => {
+							setPhase("heroSelect")
+							setTurn(1);
+							setPlayer1([])
+							setPlayer2([])
+							setPlayer1Spell(null)
+							setPlayer2Spell(null)
+							setPlayer1Hero(null)
+							setPlayer2Hero(null)
+							setResult(null)
+						}}>
+							Rematch
+						</button>
+					</div>
 
 					</div>
 			default:
