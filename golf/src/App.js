@@ -14,12 +14,10 @@ const App = () => {
 	//battle
 	//battleOver
 	const [turn, setTurn] = useState(1);
-	const [player1, setPlayer1] = useState([]);
-	const [player2, setPlayer2] = useState([]);
+	const [player1SpellList, setPlayer1SpellList] = useState([]);
+	const [player2SpellList, setPlayer2SpellList] = useState([]);
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
-	const [player1Debuffs] = useState([])
-	const [player2Debuffs] = useState([])
 	const [player1Hero, setPlayer1Hero] = useState()
 	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
@@ -32,19 +30,20 @@ const App = () => {
 		}
 
 		//check if each player has 4 spells
-		if(player1.length === 4 && player2.length === 4){
+		if(player1SpellList.length === 4 && player2SpellList.length === 4){
 			//set the phase to battle!
 			setPhase("battle");
 		}
 
-	}, [player1.length, player2.length, player1Hero, player2Hero])
+	}, [player1SpellList.length, player2SpellList.length, player1Hero, player2Hero])
 
 	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
-	const evaluateCombat = (playerAttack, opponentAttack, playerDebuffs, opponentDebuffs) => {
+	const evaluateCombat = (playerAttack, opponentAttack, playerHero) => {
 
 		let damage = opponentAttack.damage;
-		let debuffs = playerDebuffs;
+		let debuffs = playerHero.debuffs;
 		let shield = 0;
+		let heal = 0;
 
 		//if the playerAttack contains shield add the value to shield
 		if(playerAttack.shield){
@@ -72,7 +71,48 @@ const App = () => {
 			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
-		return {damage, shield, debuffs}
+		//check how much damage will come through from the players shield
+		let healthDamage = playerHero.shield - damage;
+
+		//CAP HEALTH CHECKS
+		//the player has a shield
+		if(playerHero.shield > 0){
+			//if the damage done to the player this turn will remove the shield and subtract from health
+			if(playerHero.shield - damage < 0){
+				//check if the heal doesnt exceed the max health
+				if(playerHero.health + playerAttack.heal + playerHero.shield - damage < playerHero.maxHealth){
+					heal = playerAttack.heal; 
+				//if the heal exceeds the max health
+				}else{
+					let healReduction = (playerHero.health + playerAttack.heal + playerHero.shield - damage) - playerHero.maxHealth;
+					heal = playerAttack.heal - healReduction;
+				}
+			//the damage done to the player this turn will only subtract from 
+			}else{
+				//check if the players heal needs to be capped
+				if(playerHero.health + playerAttack.heal > playerHero.maxHealth){
+					let healReduction = (playerHero.health + playerAttack.heal) - playerHero.maxHealth;
+					heal = playerAttack.heal - healReduction;
+				}else{
+					heal = playerAttack.heal;
+				}
+			}
+		//the player does not have a shield
+		}else{
+			//check if the players heal needs to be capped
+			if(playerHero.health + playerAttack.heal - damage > playerHero.maxHealth){
+				let healReduction = (playerHero.health + playerAttack.heal - damage) - playerHero.maxHealth;
+				heal = playerAttack.heal - healReduction;
+			}else{
+				heal = playerAttack.heal;
+			}
+		}
+
+
+
+		
+
+		return {damage, shield, heal}
 
 	}
 
@@ -84,8 +124,8 @@ const App = () => {
 
 		if(player1Spell && player2Spell){
 			//subtract attacks from players health
-			let p1Update = evaluateCombat(player1Spell, player2Spell, player1Debuffs, player2Debuffs);
-			let p2Update = evaluateCombat(player2Spell, player1Spell, player2Debuffs, player1Debuffs);
+			let p1Update = evaluateCombat(player1Spell, player2Spell, player1Hero);
+			let p2Update = evaluateCombat(player2Spell, player1Spell, player2Hero);
 
 			//check if either player or both players will die this turn
 			//Player Tie
@@ -102,7 +142,6 @@ const App = () => {
 				setResult(1);
 			}else{
 				//Continue the battle
-
 				p1Shield = player1Hero.shield + p1Update.shield;
 				p2Shield = player2Hero.shield + p2Update.shield;
 
@@ -112,16 +151,14 @@ const App = () => {
 
 						if(difference < 0){
 							//add the difference to the players health
-							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Spell.heal})
-							//set the shield to 0
-							setPlayer1Hero({...setPlayer1Hero, shield: 0});						
+							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + p1Update.heal, shield: 0})					
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage});
+							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage, health: player1Hero.health + p1Update.heal});
 						}
 
 					}else{
-						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Spell.heal, shield: player1Hero.shield + p1Update.shield})
+						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + p1Update.heal, shield: player1Hero.shield + p1Update.shield})
 					}
 
 					//Player 2
@@ -129,12 +166,12 @@ const App = () => {
 						let difference = p2Shield - p2Update.damage;
 
 						if(difference < 0){
-							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + player2Spell.heal, shield: 0})
+							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + p2Update.heal, shield: 0})
 						}else{
-							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage});
+							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player2Hero.health + p2Update.heal});
 						}
 					}else{
-						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Spell.heal, shield: player2Hero.shield + p2Update.shield})
+						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + p2Update.heal, shield: player2Hero.shield + p2Update.shield})
 					}
 				
 				//delay to show the spells cast
@@ -185,8 +222,8 @@ const App = () => {
 		if(turn === 1){
 			//add the selected spell to player 
 			//check if the spell is already in the players spells
-			if(!player1.includes(spell)){
-				setPlayer1([...player1, spell]);
+			if(!player1SpellList.includes(spell)){
+				setPlayer1SpellList([...player1SpellList, spell]);
 				//set turn to 2
 				setTurn(2);
 			}
@@ -194,8 +231,8 @@ const App = () => {
 		}else{
 			//add the selected spell to player 2
 			//check if the spell is already in the players spells
-			if(!player2.includes(spell)){
-				setPlayer2([...player2, spell]);
+			if(!player2SpellList.includes(spell)){
+				setPlayer2SpellList([...player2SpellList, spell]);
 				//set turn to 1
 				setTurn(1);
 			}
@@ -246,10 +283,26 @@ const App = () => {
 					</div>
 				</div>
 			case 'battleOver':
-				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
-					<h1 style={{fontSize:200, textAlign: "center"}}>
+				return <div style={{display: "flex", flexGrow: 3,flexDirection: "column", width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
+					<h1 style={{fontSize:200, textAlign: "center", width: "100%", color: "#c49c04"}}>
 						Player {result} won the battle!
 					</h1>
+					<div style={{margin: "0 auto"}}>
+						<button style={{textAlign: "center",fontSize: 45, marginBottom: 5, width: 250, height: 75, background: "#979799"}}
+						onClick = {() => {
+							setPhase("heroSelect")
+							setTurn(1);
+							setPlayer1SpellList([])
+							setPlayer2SpellList([])
+							setPlayer1Spell(null)
+							setPlayer2Spell(null)
+							setPlayer1Hero(null)
+							setPlayer2Hero(null)
+							setResult(null)
+						}}>
+							Rematch
+						</button>
+					</div>
 
 					</div>
 			default:
@@ -273,7 +326,8 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<div>
-					{player1Hero && <ProgressBar width={(((player1Hero.health - 0) * (100 - 0)) / (player1Hero.maxHealth - 0)) + 0}/>}
+					{player1Hero && <ProgressBar width={(((player1Hero.health - 0) * (100 - 0)) / (player1Hero.maxHealth - 0)) + 0} color="green"/>}
+					{player1Hero && <ProgressBar width={(((player1Hero.shield - 0) * (100 - 0)) / (player1Hero.maxShield - 0)) + 0} color="blue"/>}
 					<div style={{display: 'flex'}}>
 						<h2>Player 1</h2>
 						{player1Hero && <img alt="" src={player1Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
@@ -288,7 +342,7 @@ const App = () => {
 					}
 				</div>
 				<div style={{display: 'flex'}}>
-					{player1.map((spell, index) => {
+					{player1SpellList.map((spell, index) => {
 							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 						})}
 				</div>
@@ -299,7 +353,8 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<div>
-					{player2Hero && <ProgressBar width={(((player2Hero.health - 0) * (100 - 0)) / (player2Hero.maxHealth - 0)) + 0}/>}
+					{player2Hero && <ProgressBar width={(((player2Hero.health - 0) * (100 - 0)) / (player2Hero.maxHealth - 0)) + 0} color="green"/>}
+					{player2Hero && <ProgressBar width={(((player2Hero.shield - 0) * (100 - 0)) / (player2Hero.maxShield - 0)) + 0} color="blue"/>}
 					<div style={{display: 'flex'}}>
 						<h2>Player 2</h2>
 						{player2Hero && <img alt="" src={player2Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
@@ -314,7 +369,7 @@ const App = () => {
 					}
 				</div>
 				<div style={{display: 'flex'}}>
-					{player2.map((spell, index) => {
+					{player2SpellList.map((spell, index) => {
 							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 						})}
 				</div>
