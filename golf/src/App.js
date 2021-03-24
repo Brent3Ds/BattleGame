@@ -12,8 +12,8 @@ const App = () => {
 	const [phase, setPhase] = useState("draft");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
-	const [player1Health, setPlayer1Health] = useState(1000);
-	const [player2Health, setPlayer2Health] = useState(1000);
+	const [player1Health, setPlayer1Health] = useState(3000);
+	const [player2Health, setPlayer2Health] = useState(3000);
 	// const [player1Defence, setPlayer1Defence] = useState(0);
 	// const [player2Defence, setPlayer2Defence] = useState(0);
 	const [player1Shield, setPlayer1Shield] = useState(0);
