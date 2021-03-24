@@ -40,11 +40,12 @@ const App = () => {
 	}, [player1.length, player2.length, player1Hero, player2Hero])
 
 	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
-	const evaluateCombat = (playerAttack, opponentAttack, playerDebuffs, opponentDebuffs) => {
+	const evaluateCombat = (playerAttack, opponentAttack, playerHero) => {
 
 		let damage = opponentAttack.damage;
-		let debuffs = playerDebuffs;
+		let debuffs = playerHero.debuffs;
 		let shield = 0;
+		let heal = 0;
 
 		//if the playerAttack contains shield add the value to shield
 		if(playerAttack.shield){
@@ -125,8 +126,8 @@ const App = () => {
 
 		if(player1Spell && player2Spell){
 			//subtract attacks from players health
-			let p1Update = evaluateCombat(player1Spell, player2Spell, player1Debuffs, player2Debuffs);
-			let p2Update = evaluateCombat(player2Spell, player1Spell, player2Debuffs, player1Debuffs);
+			let p1Update = evaluateCombat(player1Spell, player2Spell, player1Hero);
+			let p2Update = evaluateCombat(player2Spell, player1Spell, player2Hero);
 
 			//check if either player or both players will die this turn
 			//Player Tie
@@ -143,7 +144,6 @@ const App = () => {
 				setResult(1);
 			}else{
 				//Continue the battle
-
 				p1Shield = player1Hero.shield + p1Update.shield;
 				p2Shield = player2Hero.shield + p2Update.shield;
 
@@ -153,15 +153,14 @@ const App = () => {
 
 						if(difference < 0){
 							//add the difference to the players health
-							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Spell.heal, shield: 0})					
+							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + p1Update.heal, shield: 0})					
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage, health: player1Hero.health + player1Spell.heal});
+							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage, health: player1Hero.health + p1Update.heal});
 						}
 
 					}else{
-						console.log("No Shield");
-						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Spell.heal, shield: player1Hero.shield + p1Update.shield})
+						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + p1Update.heal, shield: player1Hero.shield + p1Update.shield})
 					}
 
 					//Player 2
@@ -169,13 +168,12 @@ const App = () => {
 						let difference = p2Shield - p2Update.damage;
 
 						if(difference < 0){
-							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + player2Spell.heal, shield: 0})
+							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + p2Update.heal, shield: 0})
 						}else{
-							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player1Hero.health + player1Spell.heal});
 							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player2Hero.health + p2Update.heal});
 						}
 					}else{
-						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Spell.heal, shield: player2Hero.shield + p2Update.shield})
+						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + p2Update.heal, shield: player2Hero.shield + p2Update.shield})
 					}
 				
 				//delay to show the spells cast
