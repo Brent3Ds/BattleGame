@@ -118,7 +118,7 @@
             "shield": 100
         },
         {
-            "name": "TrueShot",
+            "name": "True Shot",
             "source": "/images/spells/trueshot.svg",
             "damage": 320,
             "heal": 0,
