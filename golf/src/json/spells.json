@@ -85,6 +85,14 @@
             "damage":0,
             "heal":0,
             "shield":100
+        },
+        {
+            "name":"Jesus Beam",
+            "source":"/images/spells/jesusbeam.svg",
+            "damage": 200,
+            "heal": 100,
+            "shield": 100
+        },
         }
     ]
 }
