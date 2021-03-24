@@ -7,11 +7,15 @@ import Card from "./components/Card";
 import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
-
+	const [phase, setPhase] = useState("heroSelect");
+	//Phases:
+	//heroSelect
+	//draft
+	//battle
+	//battleOver
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
-	const [phase, setPhase] = useState("heroSelect");
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
 	const [player1Debuffs] = useState([])
