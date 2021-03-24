@@ -115,6 +115,19 @@
             "damage": 0,
             "heal": 275,
             "shield": 100
+        },
+        {
+            "name": "TrueShot",
+            "source": "/images/spells/bow-and-arrow.svg",
+            "damage": 320,
+            "damageOverTime": 15,
+            "damageOverTimeDuration": 3
+        },
+        {
+            "name": "Back Stab",
+            "source": "/images/spells/knife.svg",
+            "damage": 420,
+            "heal": 50
         }
     ]
 }
