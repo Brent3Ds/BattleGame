@@ -7,12 +7,12 @@ const container_styles = {
 
 const progress_styles = {
     height: '100%',
-    background: 'green'
+    
 }
 
-const ProgressBar = ({ children, width }) => {
+const ProgressBar = ({ children, width, color }) => {
     return <div style={container_styles}>
-        <div style={{...progress_styles, width: `${width}%`}}>{children}</div>
+        <div style={{...progress_styles, width: `${width}%`, background: color}}>{children}</div>
     </div>
 }
 

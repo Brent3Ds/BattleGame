@@ -2,7 +2,7 @@ const container_styles = {
 	border: '1px solid #7D7D7D',
 	borderRadius: 4,
 	width: 200,
-	height: 170,
+	height: 230,
 	margin: '10px 0 0 10px',
 	cursor: 'pointer',
 	userSelect: 'none',

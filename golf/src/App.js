@@ -269,7 +269,8 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<div>
-					{player1Hero && <ProgressBar width={(((player1Hero.health - 0) * (100 - 0)) / (player1Hero.maxHealth - 0)) + 0}/>}
+					{player1Hero && <ProgressBar width={(((player1Hero.health - 0) * (100 - 0)) / (player1Hero.maxHealth - 0)) + 0} color="green"/>}
+					{player1Hero && <ProgressBar width={(((player1Hero.shield - 0) * (100 - 0)) / (player1Hero.maxShield - 0)) + 0} color="blue"/>}
 					<div style={{display: 'flex'}}>
 						<h2>Player 1</h2>
 						{player1Hero && <img alt="" src={player1Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
@@ -295,7 +296,8 @@ const App = () => {
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<div>
-					{player2Hero && <ProgressBar width={(((player2Hero.health - 0) * (100 - 0)) / (player2Hero.maxHealth - 0)) + 0}/>}
+					{player2Hero && <ProgressBar width={(((player2Hero.health - 0) * (100 - 0)) / (player2Hero.maxHealth - 0)) + 0} color="green"/>}
+					{player2Hero && <ProgressBar width={(((player2Hero.shield - 0) * (100 - 0)) / (player2Hero.maxShield - 0)) + 0} color="blue"/>}
 					<div style={{display: 'flex'}}>
 						<h2>Player 2</h2>
 						{player2Hero && <img alt="" src={player2Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}

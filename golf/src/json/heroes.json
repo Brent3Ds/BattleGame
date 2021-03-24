@@ -7,7 +7,8 @@
             "maxHealth": 5000,
             "defence": 80,
             "dodgeChance": 30,
-            "shield": 0
+            "shield": 0,
+            "maxShield": 1000
         },
         {
             "name": "Wizard",
@@ -16,7 +17,8 @@
             "maxHealth": 3000,
             "defence": 35,
             "dodgeChance": 15,
-            "shield": 0
+            "shield": 500,
+            "maxShield": 1000
         },
         {
             "name": "Rogue",
@@ -25,7 +27,8 @@
             "maxHealth": 2500,
             "defence": 40,
             "dodgeChance": 45,
-            "shield": 0
+            "shield": 250,
+            "maxShield": 1000
         },
         {
             "name": "Hunter",
@@ -34,7 +37,8 @@
             "maxHealth": 3500,
             "defence": 50,
             "dodgeChance": 15,
-            "shield": 0
+            "shield": 250,
+            "maxShield": 1000
         }
     ]
 }
