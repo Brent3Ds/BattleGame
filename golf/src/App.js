@@ -15,8 +15,10 @@ const App = () => {
 	const [player2Attack, setPlayer2Attack] = useState();
 	const [player1Health, setPlayer1Health] = useState(1000);
 	const [player2Health, setPlayer2Health] = useState(1000);
-	const [player1Defence, setPlayer1Defence] = useState(0);
-	const [player2Defence, setPlayer2Defence] = useState(0);
+	// const [player1Defence, setPlayer1Defence] = useState(0);
+	// const [player2Defence, setPlayer2Defence] = useState(0);
+	const [player1Shield, setPlayer1Shield] = useState(0);
+	const [player2Shield, setPlayer2Shield] = useState(0);
 	const [player1Debuffs, setPlayer1Debuffs] = useState([])
 	const [player2Debuffs, setPlayer2Debuffs] = useState([])
 	const [player1Hero, setPlayer1Hero] = useState()
@@ -105,8 +107,8 @@ const App = () => {
 			}else{
 				//Continue the battle
 
-				p1Shield = player1Defence + p1Update.shield;
-				p2Shield = player2Defence + p2Update.shield;
+				p1Shield = player1Shield + p1Update.shield;
+				p2Shield = player2Shield + p2Update.shield;
 
 					//Player 1
 					if(p1Shield > 0){
@@ -116,15 +118,15 @@ const App = () => {
 							//add the difference to the players health
 							setPlayer1Health(player1Health + difference + player1Attack.heal);
 							//set the shield to 0
-							setPlayer1Defence(0);						
+							setPlayer1Shield(0);						
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Defence(p1Shield - p1Update.damage);
+							setPlayer1Shield(p1Shield - p1Update.damage);
 						}
 
 					}else{
 						setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
-						setPlayer1Defence(player1Defence + p1Update.shield);
+						setPlayer1Shield(player1Shield + p1Update.shield);
 					}
 
 					//Player 2
@@ -133,13 +135,13 @@ const App = () => {
 
 						if(difference < 0){
 							setPlayer2Health(player2Health + difference + player2Attack.heal);
-							setPlayer2Defence(0);
+							setPlayer2Shield(0);
 						}else{
-							setPlayer2Defence(p2Shield - p2Update.damage);
+							setPlayer2Shield(p2Shield - p2Update.damage);
 						}
 					}else{
 						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
-						setPlayer2Defence(player2Defence + p2Update.shield);
+						setPlayer2Shield(player2Shield + p2Update.shield);
 					}
 				
 				//update the state of p1 health and debuffs
@@ -283,6 +285,7 @@ const App = () => {
 						<div>
 							<h2>Health: {player1Hero.health}</h2>
 							<h2>Defence: {player1Hero.defence}</h2>
+							<h2>Shield: {player1Shield}</h2>
 						</div>	
 					}
 				</div>
@@ -303,6 +306,7 @@ const App = () => {
 						<img alt="" src={player2Hero.source} style={{height: 30, width: 30}}/>
 						<h2>Health: {player2Hero.health}</h2>
 						<h2>Defence: {player2Hero.defence}</h2>
+						<h2>Shield: {player2Shield}</h2>
 					</div>
 				}
 			
