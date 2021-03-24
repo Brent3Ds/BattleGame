@@ -112,9 +112,7 @@ const App = () => {
 
 						if(difference < 0){
 							//add the difference to the players health
-							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Spell.heal})
-							//set the shield to 0
-							setPlayer1Hero({...setPlayer1Hero, shield: 0});						
+							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Spell.heal, shield: 0})					
 						}else{
 							//subtract the damage from the shield
 							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage});
