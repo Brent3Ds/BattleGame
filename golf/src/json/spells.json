@@ -108,6 +108,13 @@
             "damage": 100,
             "damageOverTime": 100,
             "damageOverTimeDuration": 3
+        },
+        {
+            "name":"Holy Prayer",
+            "source":"/images/spells/celestial.svg",
+            "damage": 0,
+            "heal": 275,
+            "shield": 100
         }
     ]
 }
