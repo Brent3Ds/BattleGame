@@ -19,7 +19,7 @@
         {
             "name": "Flame Pillar",
             "source": "/images/spells/flamepillar.svg",
-            "damage": 380,
+            "damage": 200,
             "heal": 0
         },
         {
@@ -53,10 +53,10 @@
         {
             "name": "Lightning Storm",
             "source":"/images/spells/lightningstorm.svg",
-            "damage": 150,
+            "damage": 100,
             "heal":0,
             "damageOverTime": 100, 
-            "damageOverTimeDuration": 2
+            "damageOverTimeDuration": 3
         },
         {
             "name": "Heavy Slam",
@@ -114,8 +114,8 @@
             "name":"Holy Prayer",
             "source":"/images/spells/holyprayer.svg",
             "damage": 0,
-            "heal": 275,
-            "shield": 100
+            "heal": 400,
+            "shield": 0
         },
         {
             "name": "True Shot",
