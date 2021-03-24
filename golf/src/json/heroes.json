@@ -5,14 +5,16 @@
             "source": "/images/heroes/warrior.svg",
             "health": 5000,
             "defence": 80,
-            "dodgeChance": 30
+            "dodgeChance": 30,
+            "shield": 0
         },
         {
             "name": "Wizard",
             "source": "/images/heroes/wizard.svg",
             "health": 3000,
             "defence": 35,
-            "dodgeChance": 15
+            "dodgeChance": 15,
+            "shield": 0
         }
     ]
 }
