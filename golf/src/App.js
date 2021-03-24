@@ -13,8 +13,6 @@ const App = () => {
 	const [phase, setPhase] = useState("heroSelect");
 	const [player1Attack, setPlayer1Attack] = useState();
 	const [player2Attack, setPlayer2Attack] = useState();
-	const [player1Health, setPlayer1Health] = useState(1000);
-	const [player2Health, setPlayer2Health] = useState(1000);
 	// const [player1Defence, setPlayer1Defence] = useState(0);
 	// const [player2Defence, setPlayer2Defence] = useState(0);
 	const [player1Shield, setPlayer1Shield] = useState(0);
@@ -93,15 +91,15 @@ const App = () => {
 
 			//check if either player or both players will die this turn
 			//Player Tie
-			if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+			if(player1Hero.health - p1Update.damage + player1Attack.heal <= 0 && player2Hero.health - p2Update.damage + player2Attack.heal <= 0){
 				setPhase("battleOver");
 				setResult(0);
 			//Player 2 Wins
-			}else if(player1Health - p1Update.damage + player1Attack.heal <= 0 && player2Health - p2Update.damage + player2Attack.heal >= 0){
+			}else if(player1Hero.health - p1Update.damage + player1Attack.heal <= 0 && player2Hero.health - p2Update.damage + player2Attack.heal >= 0){
 				setPhase("battleOver");
 				setResult(2);
 			//Player 1 Wins
-			}else if(player1Health - p1Update.damage + player1Attack.heal >= 0 && player2Health - p2Update.damage + player2Attack.heal <= 0){
+			}else if(player1Hero.health - p1Update.damage + player1Attack.heal >= 0 && player2Hero.health - p2Update.damage + player2Attack.heal <= 0){
 				setPhase("battleOver");
 				setResult(1);
 			}else{
@@ -116,7 +114,7 @@ const App = () => {
 
 						if(difference < 0){
 							//add the difference to the players health
-							setPlayer1Health(player1Health + difference + player1Attack.heal);
+							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Attack.heal})
 							//set the shield to 0
 							setPlayer1Shield(0);						
 						}else{
@@ -125,7 +123,7 @@ const App = () => {
 						}
 
 					}else{
-						setPlayer1Health(player1Health - p1Update.damage + player1Attack.heal);
+						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Attack.heal})
 						setPlayer1Shield(player1Shield + p1Update.shield);
 					}
 
@@ -134,13 +132,13 @@ const App = () => {
 						let difference = p2Shield - p2Update.damage;
 
 						if(difference < 0){
-							setPlayer2Health(player2Health + difference + player2Attack.heal);
+							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + player2Attack.heal})
 							setPlayer2Shield(0);
 						}else{
 							setPlayer2Shield(p2Shield - p2Update.damage);
 						}
 					}else{
-						setPlayer2Health(player2Health - p2Update.damage + player2Attack.heal);
+						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Attack.heal})
 						setPlayer2Shield(player2Shield + p2Update.shield);
 					}
 				
