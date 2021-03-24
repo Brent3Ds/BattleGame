@@ -7,15 +7,19 @@ import Card from "./components/Card";
 import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
-
+	const [phase, setPhase] = useState("heroSelect");
+	//Phases:
+	//heroSelect
+	//draft
+	//battle
+	//battleOver
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
-	const [phase, setPhase] = useState("heroSelect");
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
-	const [player1Debuffs, setPlayer1Debuffs] = useState([])
-	const [player2Debuffs, setPlayer2Debuffs] = useState([])
+	const [player1Debuffs] = useState([])
+	const [player2Debuffs] = useState([])
 	const [player1Hero, setPlayer1Hero] = useState()
 	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
@@ -65,7 +69,6 @@ const App = () => {
 
 		//if the opponents spell includes damage over time add the debuff to the player
 		if(opponentAttack.damageOverTime){
-
 			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
@@ -73,7 +76,6 @@ const App = () => {
 
 	}
 
-	//Check if both players have submitted attacks
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
@@ -135,12 +137,11 @@ const App = () => {
 						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Spell.heal, shield: player2Hero.shield + p2Update.shield})
 					}
 				
-				//update the state of p1 health and debuffs
 				//delay to show the spells cast
 				setTimeout(function(){
-				//set player attacks to null
-				setPlayer1Spell(null);
-				setPlayer2Spell(null);
+					//set player attacks to null
+					setPlayer1Spell(null);
+					setPlayer2Spell(null);
 				}, 3000);
 			}
 		}
