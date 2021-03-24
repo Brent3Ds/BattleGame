@@ -131,6 +131,7 @@ const App = () => {
 							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + player2Spell.heal, shield: 0})
 						}else{
 							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player1Hero.health + player1Spell.heal});
+							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player2Hero.health + p2Update.heal});
 						}
 					}else{
 						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Spell.heal, shield: player2Hero.shield + p2Update.shield})
