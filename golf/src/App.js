@@ -7,11 +7,15 @@ import Card from "./components/Card";
 import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
-
+	const [phase, setPhase] = useState("heroSelect");
+	//Phases:
+	//heroSelect
+	//draft
+	//battle
+	//battleOver
 	const [turn, setTurn] = useState(1);
 	const [player1, setPlayer1] = useState([]);
 	const [player2, setPlayer2] = useState([]);
-	const [phase, setPhase] = useState("heroSelect");
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
 	const [player1Debuffs] = useState([])
@@ -242,10 +246,26 @@ const App = () => {
 					</div>
 				</div>
 			case 'battleOver':
-				return <div style={{display: "flex", flexGrow: 3, width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
-					<h1 style={{fontSize:200, textAlign: "center"}}>
+				return <div style={{display: "flex", flexGrow: 3,flexDirection: "column", width: '100%', borderBottom: '2px solid #333', background: '#000', color: '#FFF'}}>
+					<h1 style={{fontSize:200, textAlign: "center", width: "100%", color: "#c49c04"}}>
 						Player {result} won the battle!
 					</h1>
+					<div style={{margin: "0 auto"}}>
+						<button style={{textAlign: "center",fontSize: 45, marginBottom: 5, width: 250, height: 75, background: "#979799"}}
+						onClick = {() => {
+							setPhase("heroSelect")
+							setTurn(1);
+							setPlayer1([])
+							setPlayer2([])
+							setPlayer1Spell(null)
+							setPlayer2Spell(null)
+							setPlayer1Hero(null)
+							setPlayer2Hero(null)
+							setResult(null)
+						}}>
+							Rematch
+						</button>
+					</div>
 
 					</div>
 			default:
