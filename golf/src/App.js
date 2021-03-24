@@ -4,6 +4,7 @@ import {useState, useEffect} from "react";
 import {spells} from "./json/spells";
 import {heroes} from "./json/heroes";
 import Card from "./components/Card";
+import ProgressBar from "./components/ProgressBar";
 
 const App = () => {
 
@@ -118,8 +119,7 @@ const App = () => {
 						}
 
 					}else{
-						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Spell.heal})
-						setPlayer1Hero(player1Hero.shield + p1Update.shield);
+						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Spell.heal, shield: player1Hero.shield + p1Update.shield})
 					}
 
 					//Player 2
@@ -263,10 +263,11 @@ const App = () => {
 	{/* Player Input Field - Where the player's spells/hotkeys are */}
 	<div style={{background: '#F3F3F3', width: '100%', flexGrow: 1, display: 'flex'}}>
 
-		{/* Player 1 - Right Side */}
+		{/* Player 1 - Left Side */}
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
 				<div>
+					{player1Hero && <ProgressBar width={(((player1Hero.health - 0) * (100 - 0)) / (player1Hero.maxHealth - 0)) + 0}/>}
 					<div style={{display: 'flex'}}>
 						<h2>Player 1</h2>
 						{player1Hero && <img alt="" src={player1Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
@@ -291,21 +292,26 @@ const App = () => {
 		{/* Player 2 - Right Side */}
 		<div style={{display: "flex", flexDirection: 'column', width: '50%', borderLeft: '1px solid #333'}}>
 			<div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-				<h2>Player 2</h2>
-				{player2Hero && 
-					<div>
-						<img alt="" src={player2Hero.source} style={{height: 30, width: 30}}/>
-						<h2>Health: {player2Hero.health}</h2>
-						<h2>Defence: {player2Hero.defence}</h2>
-						<h2>Shield: {player2Hero.shield}</h2>
+				<div>
+					{player2Hero && <ProgressBar width={(((player2Hero.health - 0) * (100 - 0)) / (player2Hero.maxHealth - 0)) + 0}/>}
+					<div style={{display: 'flex'}}>
+						<h2>Player 2</h2>
+						{player2Hero && <img alt="" src={player2Hero.source} style={{height: 30, width: 30, marginTop: 20}}/>}
 					</div>
-				}
-			
-			</div>
-			<div style={{display: 'flex'}}>
-				{player2.map((spell, index) => {
-						return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
-					})}
+					
+					{player2Hero && 
+						<div>
+							<h2>Health: {player2Hero.health}</h2>
+							<h2>Defence: {player2Hero.defence}</h2>
+							<h2>Shield: {player2Hero.shield}</h2>
+						</div>	
+					}
+				</div>
+				<div style={{display: 'flex'}}>
+					{player2.map((spell, index) => {
+							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
+						})}
+				</div>
 			</div>
 		</div>
 	</div>
