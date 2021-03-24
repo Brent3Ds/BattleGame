@@ -72,7 +72,48 @@ const App = () => {
 			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
 		}
 
-		return {damage, shield, debuffs}
+		//check how much damage will come through from the players shield
+		let healthDamage = playerHero.shield - damage;
+
+		//CAP HEALTH CHECKS
+		//the player has a shield
+		if(playerHero.shield > 0){
+			//if the damage done to the player this turn will remove the shield and subtract from health
+			if(playerHero.shield - damage < 0){
+				//check if the heal doesnt exceed the max health
+				if(playerHero.health + playerAttack.heal + playerHero.shield - damage < playerHero.maxHealth){
+					heal = playerAttack.heal; 
+				//if the heal exceeds the max health
+				}else{
+					let healReduction = (playerHero.health + playerAttack.heal + playerHero.shield - damage) - playerHero.maxHealth;
+					heal = playerAttack.heal - healReduction;
+				}
+			//the damage done to the player this turn will only subtract from 
+			}else{
+				//check if the players heal needs to be capped
+				if(playerHero.health + playerAttack.heal > playerHero.maxHealth){
+					let healReduction = (playerHero.health + playerAttack.heal) - playerHero.maxHealth;
+					heal = playerAttack.heal - healReduction;
+				}else{
+					heal = playerAttack.heal;
+				}
+			}
+		//the player does not have a shield
+		}else{
+			//check if the players heal needs to be capped
+			if(playerHero.health + playerAttack.heal - damage > playerHero.maxHealth){
+				let healReduction = (playerHero.health + playerAttack.heal - damage) - playerHero.maxHealth;
+				heal = playerAttack.heal - healReduction;
+			}else{
+				heal = playerAttack.heal;
+			}
+		}
+
+
+
+		
+
+		return {damage, shield, heal}
 
 	}
 
