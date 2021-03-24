@@ -93,6 +93,14 @@
             "heal": 100,
             "shield": 100
         },
+        {
+            "name":"Slice",
+            "source":"/images/spells/slice.svg",
+            "damage": 50,
+            "heal": 0,
+            "shield": 0,
+            "damageOverTime": 10,
+            "damageOverTimeDuration": 10
         }
     ]
 }
