@@ -18,8 +18,6 @@ const App = () => {
 	const [player2SpellList, setPlayer2SpellList] = useState([]);
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
-	const [player1Debuffs] = useState([])
-	const [player2Debuffs] = useState([])
 	const [player1Hero, setPlayer1Hero] = useState()
 	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
