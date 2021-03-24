@@ -106,6 +106,7 @@
             "name":"Jesus Beam",
             "source":"/images/spells/jesusbeam.svg",
             "damage": 100,
+            "heal": 0,
             "damageOverTime": 100,
             "damageOverTimeDuration": 3
         },
