@@ -115,10 +115,11 @@ const App = () => {
 							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + player1Spell.heal, shield: 0})					
 						}else{
 							//subtract the damage from the shield
-							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage});
+							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage, health: player1Hero.health + player1Spell.heal});
 						}
 
 					}else{
+						console.log("No Shield");
 						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + player1Spell.heal, shield: player1Hero.shield + p1Update.shield})
 					}
 
@@ -129,7 +130,7 @@ const App = () => {
 						if(difference < 0){
 							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + player2Spell.heal, shield: 0})
 						}else{
-							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage});
+							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player1Hero.health + player1Spell.heal});
 						}
 					}else{
 						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + player2Spell.heal, shield: player2Hero.shield + p2Update.shield})
