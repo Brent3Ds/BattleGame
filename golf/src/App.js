@@ -5,6 +5,7 @@ import {spells} from "./json/spells";
 import {heroes} from "./json/heroes";
 import Card from "./components/Card";
 import ProgressBar from "./components/ProgressBar";
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
 	const [phase, setPhase] = useState("heroSelect");
@@ -22,6 +23,14 @@ const App = () => {
 	const [player2Hero, setPlayer2Hero] = useState()
 	const [result, setResult] = useState();
 
+
+	//adds a uuid to the players id attribute
+	const createUniquePlayer = (player) => {
+		player.id = uuidv4();
+		return player
+		
+	}
+
 	//Check if ready to move from to next phase
 	useEffect(() => {
 		//check if each player has selected a hero
@@ -38,150 +47,82 @@ const App = () => {
 	}, [player1SpellList.length, player2SpellList.length, player1Hero, player2Hero])
 
 	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
-	const evaluateCombat = (playerAttack, opponentAttack, playerHero) => {
+	const evaluateCombat = (p1Hero, p2Hero, p1Spell, p2Spell) => {
 
-		let damage = opponentAttack.damage;
-		let debuffs = playerHero.debuffs;
-		let shield = 0;
-		let heal = 0;
+		console.log("player 1: ", p1Hero);
+		console.log("player 2: ", p2Hero);
 
-		//if the playerAttack contains shield add the value to shield
-		if(playerAttack.shield){
-			shield += playerAttack.shield;
-		}
+		//console.log("player 1 spell: ", p1Spell);
+		//console.log("player 2 spell: ", p2Spell);
 
-		//if the player has debuffs add the damage from them to damage and decrement/remove the duration
-		if(debuffs){
-			for(let i=0; i<debuffs.length; i++){
-				//add the debuff damage to the damage
-				damage += debuffs[i].damage;
-				//decrement the debuff duration / remove the debuff from the list
-				if(debuffs[i].duration === 1){
-					//remove the debuff
-					debuffs.splice(i,1);
-				}else{
-					//decrement the debuff
-					debuffs[i].duration -= 1;
-				}
+		let player1Damage = p1Spell.damage;
+		let player2Damage = p2Spell.damage;
+
+		let player1Heal = p1Spell.heal;
+		let player2Heal = p2Spell.heal;
+
+		let player1Shield = p1Spell.shield;
+		let player2Shield = p2Spell.shield;
+
+		//iterate through the debuffs
+		/*
+		if(p1Hero.debuffs){
+			for(let i=0; i<p1Hero.debuffs; i++){
+				//
+				console.log("p1 debuff: ");
 			}
 		}
+		*/
 
-		//if the opponents spell includes damage over time add the debuff to the player
-		if(opponentAttack.damageOverTime){
-			debuffs.push({damage: opponentAttack.damageOverTime, duration: opponentAttack.damageOverTimeDuration, type: opponentAttack.overTimeType})
+		//if player 2's spell contains debuffs
+		if(p2Spell.damageOverTime){
+			//add the debuff to player 1
+			p1Hero.debuffs.push({damage: p2Spell.damageOverTime, duration: p2Spell.damageOverTimeDuration, type: "damage"});
+
+		}
+		if(p2Spell.defenceOverTime){
+			console.log("p2 defence");
+			//add the debuff to player 2
+			p2Hero.debuffs.push({defence: p2Spell.defenceOverTime, duration: p2Spell.defenceOverTimeDuration, type: "defence"});
 		}
 
-		//check how much damage will come through from the players shield
-		let healthDamage = playerHero.shield - damage;
+		//if player 1's spell contains debuffs
+		if(p1Spell.damageOverTime){
+			//add the debuff to player 1
+			p2Hero.debuffs.push({damage: p1Spell.damageOverTime, duration: p1Spell.damageOverTimeDuration, type: "damage"});
 
-		//CAP HEALTH CHECKS
-		//the player has a shield
-		if(playerHero.shield > 0){
-			//if the damage done to the player this turn will remove the shield and subtract from health
-			if(playerHero.shield - damage < 0){
-				//check if the heal doesnt exceed the max health
-				if(playerHero.health + playerAttack.heal + playerHero.shield - damage < playerHero.maxHealth){
-					heal = playerAttack.heal; 
-				//if the heal exceeds the max health
-				}else{
-					let healReduction = (playerHero.health + playerAttack.heal + playerHero.shield - damage) - playerHero.maxHealth;
-					heal = playerAttack.heal - healReduction;
-				}
-			//the damage done to the player this turn will only subtract from 
-			}else{
-				//check if the players heal needs to be capped
-				if(playerHero.health + playerAttack.heal > playerHero.maxHealth){
-					let healReduction = (playerHero.health + playerAttack.heal) - playerHero.maxHealth;
-					heal = playerAttack.heal - healReduction;
-				}else{
-					heal = playerAttack.heal;
-				}
-			}
-		//the player does not have a shield
-		}else{
-			//check if the players heal needs to be capped
-			if(playerHero.health + playerAttack.heal - damage > playerHero.maxHealth){
-				let healReduction = (playerHero.health + playerAttack.heal - damage) - playerHero.maxHealth;
-				heal = playerAttack.heal - healReduction;
-			}else{
-				heal = playerAttack.heal;
-			}
+		}
+		if(p1Spell.defenceOverTime){
+			console.log("p1 defence");
+			//add the debuff to player 2
+			p1Hero.debuffs.push({defence: p1Spell.defenceOverTime, duration: p1Spell.defenceOverTimeDuration, type: "defence"});
 		}
 
-
-
-		
-
-		return {damage, shield, heal}
+		console.log("hero 1 debuffs", p1Hero.debuffs);
+		console.log("hero 2 debuffs", p2Hero.debuffs);
 
 	}
 
 	//Check if both players have submitted attacks
 	useEffect(() => {
 
-		let p1Shield = 0;
-		let p2Shield = 0;
-
+		//if both spells are selected
 		if(player1Spell && player2Spell){
-			//subtract attacks from players health
-			let p1Update = evaluateCombat(player1Spell, player2Spell, player1Hero);
-			let p2Update = evaluateCombat(player2Spell, player1Spell, player2Hero);
+		//call the evaluate combat function
 
-			//check if either player or both players will die this turn
-			//Player Tie
-			if(player1Hero.health - p1Update.damage + player1Spell.heal <= 0 && player2Hero.health - p2Update.damage + player2Spell.heal <= 0){
-				setPhase("battleOver");
-				setResult(0);
-			//Player 2 Wins
-			}else if(player1Hero.health - p1Update.damage + player1Spell.heal <= 0 && player2Hero.health - p2Update.damage + player2Spell.heal >= 0){
-				setPhase("battleOver");
-				setResult(2);
-			//Player 1 Wins
-			}else if(player1Hero.health - p1Update.damage + player1Spell.heal >= 0 && player2Hero.health - p2Update.damage + player2Spell.heal <= 0){
-				setPhase("battleOver");
-				setResult(1);
-			}else{
-				//Continue the battle
-				p1Shield = player1Hero.shield + p1Update.shield;
-				p2Shield = player2Hero.shield + p2Update.shield;
-
-					//Player 1
-					if(p1Shield > 0){
-						let difference = p1Shield - p1Update.damage;
-
-						if(difference < 0){
-							//add the difference to the players health
-							setPlayer1Hero({...player1Hero, health: player1Hero.health + difference + p1Update.heal, shield: 0})					
-						}else{
-							//subtract the damage from the shield
-							setPlayer1Hero({...player1Hero, shield: p1Shield - p1Update.damage, health: player1Hero.health + p1Update.heal});
-						}
-
-					}else{
-						setPlayer1Hero({...player1Hero, health: player1Hero.health - p1Update.damage + p1Update.heal, shield: player1Hero.shield + p1Update.shield})
-					}
-
-					//Player 2
-					if(p2Shield > 0){
-						let difference = p2Shield - p2Update.damage;
-
-						if(difference < 0){
-							setPlayer2Hero({...player2Hero, health: player2Hero.health + difference + p2Update.heal, shield: 0})
-						}else{
-							setPlayer2Hero({...player2Hero, shield: p2Shield - p2Update.damage, health: player2Hero.health + p2Update.heal});
-						}
-					}else{
-						setPlayer2Hero({...player2Hero, health: player2Hero.health - p2Update.damage + p2Update.heal, shield: player2Hero.shield + p2Update.shield})
-					}
-				
-				//delay to show the spells cast
-				setTimeout(function(){
-					//set player attacks to null
-					setPlayer1Spell(null);
-					setPlayer2Spell(null);
-				}, 3000);
-			}
+		console.log("player1  before: ", player1Hero);
+		console.log("player2 before: ", player2Hero);
+			let response = evaluateCombat(player1Hero, player2Hero, player1Spell, player2Spell);
 		}
+
+		//delay to show the spells cast
+		setTimeout(function(){
+			//set player attacks to null
+			setPlayer1Spell(null);
+			setPlayer2Spell(null);
+		}, 3000);
+
+
 	//eslint-disable-next-line
 	}, [player1Spell, player2Spell])
 
@@ -208,10 +149,16 @@ const App = () => {
 
 	const selectHero = (hero) => {
 		if(turn === 1) {
-			setPlayer1Hero(hero)
+			let uniqueHero = createUniquePlayer(hero);
+			console.log("Player 1: ", uniqueHero);
+			console.log("Turn: ", turn);
+			setPlayer1Hero(uniqueHero)
 			setTurn(2)
 		} else {
-			setPlayer2Hero(hero)
+			let uniqueHero = createUniquePlayer(hero);
+			console.log("Player 2: ", uniqueHero);
+			console.log("Turn: ", turn);
+			setPlayer2Hero(uniqueHero)
 			setTurn(1)
 		}
 	}
