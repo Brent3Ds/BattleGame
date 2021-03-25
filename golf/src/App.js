@@ -76,13 +76,13 @@ const App = () => {
 		//the player has a shield
 		if(playerHero.shield > 0){
 			//if the damage done to the player this turn will remove the shield and subtract from health
-			if(playerHero.shield - damage < 0){
+			if(healthDamage < 0){
 				//check if the heal doesnt exceed the max health
-				if(playerHero.health + playerAttack.heal + playerHero.shield - damage < playerHero.maxHealth){
+				if(playerHero.health + playerAttack.heal + healthDamage < playerHero.maxHealth){
 					heal = playerAttack.heal; 
 				//if the heal exceeds the max health
 				}else{
-					let healReduction = (playerHero.health + playerAttack.heal + playerHero.shield - damage) - playerHero.maxHealth;
+					let healReduction = (playerHero.health + playerAttack.heal + healthDamage) - playerHero.maxHealth;
 					heal = playerAttack.heal - healReduction;
 				}
 			//the damage done to the player this turn will only subtract from 
