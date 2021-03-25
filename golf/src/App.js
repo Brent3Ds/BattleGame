@@ -26,8 +26,9 @@ const App = () => {
 
 	//adds a uuid to the players id attribute
 	const createUniquePlayer = (player) => {
-		player.id = uuidv4();
-		return player
+		let newPlayer = {...player}
+		newPlayer.id = uuidv4();
+		return newPlayer
 		
 	}
 
