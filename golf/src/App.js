@@ -14,8 +14,6 @@ const App = () => {
 	//battle
 	//battleOver
 	const [turn, setTurn] = useState(1);
-	const [player1SpellList, setPlayer1SpellList] = useState([]);
-	const [player2SpellList, setPlayer2SpellList] = useState([]);
 	const [player1Spell, setPlayer1Spell] = useState();
 	const [player2Spell, setPlayer2Spell] = useState();
 	const [player1Hero, setPlayer1Hero] = useState()
@@ -30,12 +28,12 @@ const App = () => {
 		}
 
 		//check if each player has 4 spells
-		if(player1SpellList.length === 4 && player2SpellList.length === 4){
+		if(player1Hero && player2Hero && (player1Hero.spellList.length === 4 && player2Hero.spellList.length === 4)){
 			//set the phase to battle!
 			setPhase("battle");
 		}
 
-	}, [player1SpellList.length, player2SpellList.length, player1Hero, player2Hero])
+	}, [player1Hero, player2Hero])
 
 	//this function takes the selected spells for the player and opponent and returns the damage done and state of debuffs
 	const evaluateCombat = (playerAttack, opponentAttack, playerHero) => {
@@ -222,8 +220,8 @@ const App = () => {
 		if(turn === 1){
 			//add the selected spell to player 
 			//check if the spell is already in the players spells
-			if(!player1SpellList.includes(spell)){
-				setPlayer1SpellList([...player1SpellList, spell]);
+			if(!player1Hero.spellList.includes(spell)){
+				setPlayer1Hero({...player1Hero, spellList: [...player1Hero.spellList, spell]})
 				//set turn to 2
 				setTurn(2);
 			}
@@ -231,8 +229,8 @@ const App = () => {
 		}else{
 			//add the selected spell to player 2
 			//check if the spell is already in the players spells
-			if(!player2SpellList.includes(spell)){
-				setPlayer2SpellList([...player2SpellList, spell]);
+			if(!player2Hero.spellList.includes(spell)){
+				setPlayer2Hero({...player2Hero, spellList: [...player2Hero.spellList, spell]})
 				//set turn to 1
 				setTurn(1);
 			}
@@ -292,8 +290,6 @@ const App = () => {
 						onClick = {() => {
 							setPhase("heroSelect")
 							setTurn(1);
-							setPlayer1SpellList([])
-							setPlayer2SpellList([])
 							setPlayer1Spell(null)
 							setPlayer2Spell(null)
 							setPlayer1Hero(null)
@@ -342,7 +338,7 @@ const App = () => {
 					}
 				</div>
 				<div style={{display: 'flex'}}>
-					{player1SpellList.map((spell, index) => {
+					{player1Hero && player1Hero.spellList.map((spell, index) => {
 							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 						})}
 				</div>
@@ -369,7 +365,7 @@ const App = () => {
 					}
 				</div>
 				<div style={{display: 'flex'}}>
-					{player2SpellList.map((spell, index) => {
+					{player2Hero && player2Hero.spellList.map((spell, index) => {
 							return <Card key={index} spell={spell} action={() => castSpell(spell)}/>
 						})}
 				</div>

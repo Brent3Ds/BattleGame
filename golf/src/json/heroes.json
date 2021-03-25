@@ -9,7 +9,8 @@
             "dodgeChance": 30,
             "shield": 0,
             "maxShield": 1000,
-            "debuffs":[]
+            "debuffs":[], 
+            "spellList":[]
         },
         {
             "name": "Wizard",
@@ -20,7 +21,8 @@
             "dodgeChance": 15,
             "shield": 500,
             "maxShield": 1000,
-            "debuffs":[]
+            "debuffs":[], 
+            "spellList":[]
         },
         {
             "name": "Rogue",
@@ -31,7 +33,8 @@
             "dodgeChance": 45,
             "shield": 250,
             "maxShield": 1000,
-            "debuffs":[]
+            "debuffs":[], 
+            "spellList":[]
         },
         {
             "name": "Hunter",
@@ -42,7 +45,8 @@
             "dodgeChance": 15,
             "shield": 250,
             "maxShield": 1000,
-            "debuffs":[]
+            "debuffs":[], 
+            "spellList":[]
         }
     ]
 }
